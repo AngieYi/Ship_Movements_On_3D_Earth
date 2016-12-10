@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AIS </title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="Generator" content="https://gis.oregonstate.edu">
+        <link type="text/css" rel="stylesheet" href="css/style.css" />
+        <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+
+        <script type="text/javascript" src="js/three.min.js"></script>
+        <script type="text/javascript" src="js/stats.min.js"></script>
+        <script type="text/javascript" src="js/dat.gui.min.js"></script>
+        <script type="text/javascript" src="js/TrackballControls.js"></script>
+        <script type="text/javascript" src="js/ais.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+
+        <script type="x-shader/x-vertex" id="vertexshader">
+            attribute float size;
+            attribute vec3 customColor;
+            varying vec3 vColor;
+
+            void main() {
+                vColor = customColor;
+                vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+                gl_PointSize = size * ( 300.0 / length( mvPosition.xyz ) );
+                gl_Position = projectionMatrix * mvPosition;
+            }
+        </script>
+
+        <script type="x-shader/x-fragment" id="fragmentshader">
+            uniform vec3 color;
+            uniform sampler2D texture;
+            varying vec3 vColor;
+
+            void main() {
+                gl_FragColor = vec4( color * vColor, 0.5 );
+                gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+            }
+        </script>
+
+    </head>
+
+    <body>
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", start_app, false);
+        </script>
+
+        <div id="title">AIS Movements</div>
+        <div id="loading_overlay" class="hide"><img id="loading_overlay_img" src="images/loading.gif"></div>
+
+        <div id="about_box_bkg" class="hide"></div>
+
+        <div id="about_box" class="hide">
+
+        <h2>About</h2>
+        Experiment to map many of the ships between different ports. It's <strong>not</strong> showing real time positions (which would be amazing but I don't have that data).
+
+        <h2>Credits</h2>
+        <ul>
+        <a href="http://www.shadedrelief.com/natural3/pages/extra.html" target="_blank">Globe textures</a> &#9679; <a href="http://blog.mastermaps.com/2013/09/creating-webgl-earth-with-threejs.html" target="_blank">WebGL Earth</a> &#9679; <a href="http://threejs.org" target="_blank">Three.js</a>
+        </ul>
+
+        <h2>Contact</h2>
+        Find my contact details and see more experiments <a href="https://www.linkedin.com/in/hongyanyi" target="_blank">here</a> - advice, suggestions and fixes appreciated.
+
+        <div id="close_button_top"><a href="#" onclick="show_about(false);">CLOSE</a></div>
+
+        </div>
+
+    </body>
+</html>

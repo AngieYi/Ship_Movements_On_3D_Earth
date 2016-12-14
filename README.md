@@ -3,6 +3,7 @@ The automatic identification system (AIS) is an automatic tracking system used o
 
 
 About the earth
+
 1. draw a sphere and texture mapping a glaxy png to the sphere.
 
 2. draw a sphere and texture mapping a pure cloud png to the sphere.

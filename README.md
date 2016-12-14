@@ -2,7 +2,7 @@
 The automatic identification system (AIS) is an automatic tracking system used on ships and by vessel traffic services (VTS) for identifying and locating vessels by electronically exchanging data with other nearby ships, AIS base stations, and satellites.
 
 
-About the earth
+**About the earth**
 
 1. draw a sphere and texture mapping a glaxy png to the sphere.
 
@@ -17,7 +17,7 @@ About the earth
 More details refer to: http://blog.mastermaps.com/2013/09/creating-webgl-earth-with-threejs.html
 
 
-About the AIS Data Visualization
+**About the AIS Data Visualization**
 
 1. Each ship has two points, a start point with longitude and latitude, an end point with longitude and latitude.
 

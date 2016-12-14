@@ -12,7 +12,7 @@ The automatic identification system (AIS) is an automatic tracking system used o
 
 4. draw a sphere and texture mapping water/ocean png to the sphere, to highlight the water area, since water is more reflactive than earth.
 
-5. draw a sphere and texture mapping water/ocean png to the sphere, to hightlight the mountain area, it's called bump map.
+5. draw a sphere and texture mapping a bumpping earth map jpg to the sphere, to hightlight the mountain area, it's called bump map.
 
 More details refer to: http://blog.mastermaps.com/2013/09/creating-webgl-earth-with-threejs.html
 

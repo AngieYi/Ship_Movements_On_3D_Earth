@@ -76,9 +76,9 @@ function init() {
     scene.add(new THREE.AmbientLight(0x777777));
 
     // add DirectionalLight
-    var light1 = new THREE.DirectionalLight(0xffffff, 0.15);
-    light1.position.set(5, 3, 5);
-    scene.add(light1);
+    var directLight = new THREE.DirectionalLight(0xffffff, 0.15);
+    directLight.position.set(5, 3, 5);
+    scene.add(directLight);
 
     // point is texture mapping, default color is random, vertex shader and fragment shader used here
     ships = createPointCloud();

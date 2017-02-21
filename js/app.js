@@ -81,8 +81,8 @@ function init() {
     scene.add(directLight);
 
     // point is texture mapping, default color is random, vertex shader and fragment shader used here
-    ships = createPointCloud();
-    ships.rotation.y = rotation;
+    ships = createPointCloud();     // ships type is THREE.PointCloud
+    ships.rotation.y = rotation;   // by default all points position is (0,0,0),not related to actual log,lat
     scene.add(ships);
 
     /* set several control_points between each pair of points (start, end)
@@ -264,9 +264,9 @@ function latlngInterPoint(lat1, lng1, lat2, lng2, offset) {
 }
 
 // create point cloud using shader
-function createPointCloud() {
+function createPointCloud()
+{
     ship_point_cloud_geom = new THREE.BufferGeometry();
-
     num_points = vessels.length;
 
     positions = new Float32Array(num_points * 3); // positions and sizes are global variables
@@ -274,7 +274,7 @@ function createPointCloud() {
     var colors = new Float32Array(num_points * 3);
 
     for (var i = 0; i < num_points; i++) {
-        positions[3 * i + 0] = 0;
+        positions[3 * i + 0] = 0;   //original position are the same
         positions[3 * i + 1] = 0;
         positions[3 * i + 2] = 0;
 
@@ -294,15 +294,13 @@ function createPointCloud() {
     ship_point_cloud_geom.addAttribute('size', new THREE.BufferAttribute(sizes, 1));
     ship_point_cloud_geom.computeBoundingBox();
 
-
-
     var uniforms = {
         color: {
             type: "c",
-            value: new THREE.Color(0xffffff) // default is white color
+            value: new THREE.Color(0xffffff)    // default is white color
         },
         texture: {
-            type: "t", // texture picture influences the effect
+            type: "t",                          // texture picture influences the effect
             value: THREE.ImageUtils.loadTexture("images/point.png")
         }
     };
@@ -310,11 +308,11 @@ function createPointCloud() {
     var attributes = {
         size: {
             type: 'f',
-            value: null
+            value: null                    // default is null
         },
         customColor: {
             type: 'c',
-            value: null
+            value: null                    // default is null
         }
     };
 
@@ -333,8 +331,11 @@ function createPointCloud() {
     return new THREE.PointCloud(ship_point_cloud_geom, shaderMaterial);
 }
 
+
+
 // ship Control Points
-function generateControlPoints(radius) {
+function generateControlPoints(radius)
+{
     for (var f = start_ship_idx; f < end_ship_idx; ++f)
     {
         var start_lat = vessels[f]['slat'];
@@ -342,17 +343,20 @@ function generateControlPoints(radius) {
         var end_lat = vessels[f]['elat'];
         var end_lng = vessels[f]['elng'];
 
-        var max_height = Math.random() * 0.003;
-
-        var points = [];
+        // var max_height = Math.random() * 0.003; // original max_height is effected by random value
+        var max_height = 1.0 * 0.003; // change not obvious
+        var points = [];    // temp array
         var spline_control_points = 8;
-        for (var i = 0; i < spline_control_points + 1; i++) {
+
+        for (var i = 0; i < spline_control_points + 1; i++)
+        {
             var arc_angle = i * 180.0 / spline_control_points;
             var arc_radius = radius + (Math.sin(arc_angle * Math.PI / 180.0)) * max_height;
+
             var latlng = latlngInterPoint(start_lat, start_lng, end_lat, end_lng, i / spline_control_points);
 
             var pos = xyzFromLatLng(latlng.lat, latlng.lng, arc_radius); // with height
-            // var pos = xyzFromLatLng(latlng.lat, latlng.lng, 0.5);           // without height
+            //var pos = xyzFromLatLng(latlng.lat, latlng.lng, 0.5);       // without height
             points.push(new THREE.Vector3(pos.x, pos.y, pos.z));
         }
 
@@ -383,12 +387,14 @@ function shipPathLines() {
     var line_positions = new Float32Array(vessels.length * 3 * 2 * num_control_points);
     var colors = new Float32Array(vessels.length * 3 * 2 * num_control_points);
 
-    for (var i = start_ship_idx; i < end_ship_idx; ++i) {
-        for (var j = 0; j < num_control_points - 1; ++j) {
-
+    for (var i = start_ship_idx; i < end_ship_idx; ++i)
+    {
+        for (var j = 0; j < num_control_points - 1; ++j)
+        {
             //ship_path_splines are generated in generateControlPoints
             //refer: SplineCurve3.getPoint http://jsfiddle.net/epjfczz8/
             var start_pos = ship_path_splines[i].getPoint(j / (num_control_points - 1));
+            console.log("ship_path_splines",i,ship_path_splines[i].getPoint(j / (num_control_points - 1)));
             var end_pos = ship_path_splines[i].getPoint((j + 1) / (num_control_points - 1));
 
             line_positions[(i * num_control_points + j) * 6 + 0] = start_pos.x;

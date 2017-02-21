@@ -24,4 +24,4 @@ More details refer to: http://blog.mastermaps.com/2013/09/creating-webgl-earth-w
 
 2. The point cloud is handled by vertex and fragment shader, each point is a texture image. 
 
-3. The ship path line is visuzlized by some controll points. 
+3. The ship path line is visuzlized by some control points. 

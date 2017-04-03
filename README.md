@@ -20,8 +20,6 @@ More details refer to: http://blog.mastermaps.com/2013/09/creating-webgl-earth-w
 
 ##About the AIS Data Visualization##
 
-1. Each ship has two points, a start point with longitude and latitude, an end point with longitude and latitude.
-
+1. Each ship has two points, a start and end point with longitude and latitude.
 2. The point cloud is handled by vertex and fragment shader, each point is a texture image. 
-
-3. The ship path line is visuzlized by some control points. 
+3. Each ship route is a spline curve, each spline curve has 9 control points. 

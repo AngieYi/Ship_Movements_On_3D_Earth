@@ -3,29 +3,27 @@
  * author: Hongyan Yi yih@oregonstate.edu
  */
 var camera, scene, renderer, controls, stats;
-var start_ship_idx = 0;
-var end_ship_idx = vessels.length;  // how many ship points
+var length = vessels.length;  // how many ship points
 
 var positions, sizes;
-var ship_point_cloud_geom;
+var cloud_geom;
 
-var ship_path_splines = [];
-var ship_distance = [];
+var path_splines = [];
+var distance = [];
 
-var ship_path_lines;
+var path_lines;
 var ship_point_start_time = [];
 var ship_point_end_time = [];
 
-
-var ship_point_speed_changed = false;
-var ship_point_speed_scaling = 1.0;
-var ship_point_speed_min_scaling = 1.0;
-var ship_point_speed_max_scaling = 25.0;
+var speed_changed = false;
+var speed_scaling = 1.0;
+var min_scaling = 1.0;
+var max_scaling = 25.0;
 
 var ship_track_opacity = 0;
 var ship_point_size = 0.015;
 
-var sphere = 0;
+var earth = 0;
 var ships = 0;
 var clouds = 0;
 var radius = 0.5;
@@ -42,59 +40,67 @@ function init() {
     show_loading(true); //at the beginning, loading gif exists
 
     /* The renderer is responsible to render the scene in the browsers.
-     Three.js supports different renderers like WebGL,Canvas,SVG and CSS 3D.
-     We use window width and height to allow our earth to fill the browser window.*/
+     Three.js supports different renderers like WebGL,Canvas,SVG and CSS 3D.*/
     renderer = new THREE.WebGLRenderer();
-    renderer.setClearColor(0x000000, 1.0);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 1.0); // Sets the clear color and opacity.
+    renderer.setPixelRatio(window.devicePixelRatio); // Sets device pixel ratio. This is usually used for HiDPI device to prevent bluring output canvas.
+    renderer.setSize(window.innerWidth, window.innerHeight); // use window width and height to allow our earth to fill the browser window
     document.body.appendChild(renderer.domElement);
+
 
     // The camera determines what we'll see when we render the scene.
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 100);
     camera.position.z = 1.5;
 
+
     /* The scene is the container used to store and keep track
     of the objects (earth and stars) we want to render.*/
     scene = new THREE.Scene();
 
-    // add Sphere
-    sphere = createSphere(radius, segments); // radius = 0.5; defined at the beginning
-    sphere.rotation.y = rotation;
-    scene.add(sphere)
 
-    //add Cloud
-    clouds = createClouds(radius, segments); // radius is the same as sphere but + 0.001 when define a new sphere
+    // add Earth
+    earth = createEarth(radius, segments); // radius = 0.5; defined at the beginning
+    earth.rotation.y = rotation;
+    scene.add(earth)
+
+
+    // add Cloud
+    clouds = createClouds(radius, segments); // radius is the same as earth but + 0.001 when define a new sphere
     clouds.rotation.y = rotation;
     scene.add(clouds)
 
-    //add Stars
-    var stars = createStars(90, 64);    // radius = 90, much bigger than the sphere
+
+    // add Stars
+    var stars = createStars(90, 64);    // radius = 90, much bigger than the earth
     scene.add(stars);
+
 
     // add AmbientLight
     scene.add(new THREE.AmbientLight(0x777777));
 
+
     // add DirectionalLight
-    var directLight = new THREE.DirectionalLight(0xffffff, 0.15);
+    var directLight = new THREE.DirectionalLight(0xffffff, 0.15); // white,
     directLight.position.set(5, 3, 5);
     scene.add(directLight);
 
+    //--------------------------------------------------------------------------
     // point is texture mapping, default color is random, vertex shader and fragment shader used here
     ships = createPointCloud();     // ships type is THREE.PointCloud
     ships.rotation.y = rotation;   // by default all points position is (0,0,0),not related to actual log,lat
     scene.add(ships);
 
     /* set several control_points between each pair of points (start, end)
-       transfer longitude and latitude to sphere coordinates x,y,z;
-       set the ship_path_splines; ship_distance; and ship times
+       transfer longitude and latitude to earth coordinates x,y,z;
+       set the path_splines; distance; and ship times
     */
     generateControlPoints(radius);
 
-    // use ship_path_splines to set the line points, change the line color
-    ship_path_lines = shipPathLines();
-    ship_path_lines.rotation.y = rotation;
-    scene.add(ship_path_lines);
+    // use path_splines to set the line points, change the line color
+    path_lines = shipPathLines();
+    path_lines.rotation.y = rotation;
+    scene.add(path_lines);
+    //--------------------------------------------------------------------------
 
     // after all the above staffs loaded,loading gif stops loading
     show_loading(false);
@@ -105,22 +111,22 @@ function init() {
 
     gui.add(this, 'ship_point_size', 0.01, 0.2).name("Size").onChange(function(value)
     {
-        ship_point_cloud_geom.attributes.size.needsUpdate = true;
-        for (var i = start_ship_idx; i < end_ship_idx; ++i)
+        cloud_geom.attributes.size.needsUpdate = true;
+        for (var i = 0; i < length; ++i)
         {
             sizes[i] = ship_point_size;
         }
     });
 
-    gui.add(this, 'ship_point_speed_scaling', ship_point_speed_min_scaling, ship_point_speed_max_scaling).name("Speed").onFinishChange(function(value)
+    gui.add(this, 'speed_scaling', min_scaling, max_scaling).name("Speed").onFinishChange(function(value)
     {
-        ship_point_speed_changed = true;
+        speed_changed = true;
         update_ships();    // update speed and position?
-        ship_point_speed_changed = false;
+        speed_changed = false;
     });
 
     gui.add(this, 'ship_track_opacity', 0, 1.0).name("Track Opacity").onChange(function(value) {
-        ship_path_lines.material.opacity = value;
+        path_lines.material.opacity = value;
     });
 
     gui.add(this, "handle_about").name("Hongyan Yi| Credits");
@@ -156,15 +162,15 @@ function init() {
 }
 
 
-function createSphere(radius, segments) {
+function createEarth(radius, segments) {
     return new THREE.Mesh(
         /* second and third parameter is the number of width and height segments.
-         The sphere is drawn as a polygon mesh, and by adding more segments
+         The earth is drawn as a polygon mesh, and by adding more segments
          it will be less "blocky" and take more time to render.
          */
         new THREE.SphereGeometry(radius, segments, segments),
 
-        // wrap map data around the sphere.
+        // wrap map data around the earth.
         /*
          1. This material is used to create shiny materials, and we use it to make the ocean reflective.
          4096 x 2048 px, which was the maximum texture size for the GPU of my computer.
@@ -176,10 +182,9 @@ function createSphere(radius, segments) {
          This specular map defines the surface's shininess. Only the sea is specular because water reflects
          water more than earth. You can control the specular color with specular parameter.
          */
-
         new THREE.MeshPhongMaterial({
-            map:         THREE.ImageUtils.loadTexture('images/2_no_clouds_4k.jpg'),
-            bumpMap:     THREE.ImageUtils.loadTexture('images/elevation.jpg'),
+            map:         THREE.ImageUtils.loadTexture('images/no_cloud_surface.jpg'),
+            bumpMap:     THREE.ImageUtils.loadTexture('images/bump_surface.jpg'),
             bumpScale:   0.005,
             specularMap: THREE.ImageUtils.loadTexture('images/water.png'),
             specular:    new THREE.Color('grey')
@@ -189,20 +194,21 @@ function createSphere(radius, segments) {
 
 /*
  I couldn't use this JPEG directly in three.js, so I used this technique to make a transparent PNG
- (available on GitHub). I then created a new sphere mesh with a slightly larger radius.
+ (available on GitHub). I then created a new earth mesh with a slightly larger radius.
  */
 function createClouds(radius, segments) {
     return new THREE.Mesh(
         new THREE.SphereGeometry(radius + 0.001, segments, segments),
         new THREE.MeshPhongMaterial({
-            map: THREE.ImageUtils.loadTexture('images/fair_clouds_4k.png'),
+            map: THREE.ImageUtils.loadTexture('images/clouds.png'),
             transparent: true
         })
     );
 }
 
+
 /*
- The starfield is created by adding a large sphere around the Earth and project the star texture on
+ The starfield is created by adding a large earth around the Earth and project the star texture on
  the backside or inside:
  var stars = createStars(90, 64);
  scene.add(stars);
@@ -211,88 +217,58 @@ function createStars(radius, segments) {
     return new THREE.Mesh(
         new THREE.SphereGeometry(radius, segments, segments),
         new THREE.MeshBasicMaterial({
-            map:  THREE.ImageUtils.loadTexture('images/galaxy_starfield.png'),
+            map:  THREE.ImageUtils.loadTexture('images/stars.png'),
             side: THREE.BackSide,
-            specular:    new THREE.Color('grey')
+            specular: new THREE.Color('grey')
         })
     );
 }
 
-//set each ship point start and end time
-function setShipTimes(index) {
-    var scaling_factor = (ship_point_speed_scaling - ship_point_speed_min_scaling) /
-        (ship_point_speed_max_scaling - ship_point_speed_min_scaling);
 
-    var duration = (1-scaling_factor) * ship_distance[index] * 80000;   //ship_distance[index] arc_length for each ship
+// set each ship point start and end time
+function setShipTimes(index)
+{
+    var scaling_factor = (speed_scaling - min_scaling) /
+        (max_scaling - min_scaling);
+
+    var duration = (1-scaling_factor) * distance[index] * 80000;   //distance[index] arc_length for each ship
 
     var start_time = Date.now() + Math.random() * 5000; // ??? random
     ship_point_start_time[index] = start_time;
     ship_point_end_time[index] = start_time + duration;
 }
 
-function xyzFromLatLng(lat, lng, radius) {
-    var phi = (90 - lat) * Math.PI / 180;
-    var theta = (360 - lng) * Math.PI / 180;
-
-    return {
-        x: radius * Math.sin(phi) * Math.cos(theta),
-        y: radius * Math.cos(phi),
-        z: radius * Math.sin(phi) * Math.sin(theta)
-    };
-}
-
-function latlngInterPoint(lat1, lng1, lat2, lng2, offset) {
-    lat1 = lat1 * Math.PI / 180.0;
-    lng1 = lng1 * Math.PI / 180.0;
-    lat2 = lat2 * Math.PI / 180.0;
-    lng2 = lng2 * Math.PI / 180.0;
-
-    d = 2 * Math.asin(Math.sqrt(Math.pow((Math.sin((lat1 - lat2) / 2)), 2) +
-        Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin((lng1 - lng2) / 2), 2)));
-    A = Math.sin((1 - offset) * d) / Math.sin(d);
-    B = Math.sin(offset * d) / Math.sin(d);
-    x = A * Math.cos(lat1) * Math.cos(lng1) + B * Math.cos(lat2) * Math.cos(lng2);
-    y = A * Math.cos(lat1) * Math.sin(lng1) + B * Math.cos(lat2) * Math.sin(lng2);
-    z = A * Math.sin(lat1) + B * Math.sin(lat2);
-    lat = Math.atan2(z, Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))) * 180 / Math.PI;
-    lng = Math.atan2(y, x) * 180 / Math.PI;
-
-    return {
-        lat: lat,
-        lng: lng
-    };
-}
 
 // create point cloud using shader
 function createPointCloud()
 {
-    ship_point_cloud_geom = new THREE.BufferGeometry();
-    num_points = vessels.length;
+    cloud_geom = new THREE.BufferGeometry();
+    n_pnt = vessels.length;
 
-    positions = new Float32Array(num_points * 3); // positions and sizes are global variables
-    sizes = new Float32Array(num_points);
-    var colors = new Float32Array(num_points * 3);
+    positions = new Float32Array(n_pnt * 3); // positions and sizes are global variables
+    sizes = new Float32Array(n_pnt);
+    var colors = new Float32Array(n_pnt * 3); // color is temp variable
 
-    for (var i = 0; i < num_points; i++) {
-        positions[3 * i + 0] = 0;   //original position are the same
+    for (var i = 0; i < n_pnt; i++) {
+        positions[3 * i + 0] = 0;   // original position are the same
         positions[3 * i + 1] = 0;
         positions[3 * i + 2] = 0;
 
-        // colors[3 * i + 0] = Math.random(); //originally geometry color is random
+        sizes[i] = 0.02;            // can be updated by GUI, ship_point_size variable.
+
+        // colors[3 * i + 0] = Math.random(); // originally geometry color is random
         // colors[3 * i + 1] = Math.random();
         // colors[3 * i + 2] = Math.random();
 
-        colors[3 * i + 0] = 1.0;    //set geometry color to white
+        colors[3 * i + 0] = 1.0;    // set geometry color to white
         colors[3 * i + 1] = 1.0;
         colors[3 * i + 2] = 1.0;
-
-        sizes[i] = 0.02;    // can be updated by GUI, ship_point_size variable.
     }
 
-    ship_point_cloud_geom.addAttribute('position', new THREE.BufferAttribute(positions, 3));
-    ship_point_cloud_geom.addAttribute('customColor', new THREE.BufferAttribute(colors, 3));
-    ship_point_cloud_geom.addAttribute('size', new THREE.BufferAttribute(sizes, 1));
-    ship_point_cloud_geom.computeBoundingBox();
+    cloud_geom.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+    cloud_geom.addAttribute('customColor', new THREE.BufferAttribute(colors, 3));
+    cloud_geom.addAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    cloud_geom.computeBoundingBox();
 
     var uniforms = {
         color: {
@@ -308,11 +284,11 @@ function createPointCloud()
     var attributes = {
         size: {
             type: 'f',
-            value: null                    // default is null
+            value: null      // default is null
         },
         customColor: {
             type: 'c',
-            value: null                    // default is null
+            value: null      // default is null
         }
     };
 
@@ -321,55 +297,96 @@ function createPointCloud()
         attributes: attributes,
         vertexShader: document.getElementById('vertexshader').textContent,
         fragmentShader: document.getElementById('fragmentshader').textContent,
-        blending: THREE.AdditiveBlending,//what is blending?difference between additive blending & NormalBlending?
+        blending: THREE.AdditiveBlending,   //what is blending? difference between additive blending & NormalBlending?
         // blending: THREE.NormalBlending,
         depthTest: true,
         depthWrite: false,
         transparent: true
     });
 
-    return new THREE.PointCloud(ship_point_cloud_geom, shaderMaterial);
+    return new THREE.PointCloud(cloud_geom, shaderMaterial);
 }
 
+
+function xyzFromLatLng(lat, lng, radius)
+{
+    var phi = (90 - lat) * Math.PI / 180;
+    var theta = (360 - lng) * Math.PI / 180;
+
+    return {
+        x: radius * Math.sin(phi) * Math.cos(theta),
+        y: radius * Math.cos(phi),
+        z: radius * Math.sin(phi) * Math.sin(theta)
+    };
+}
+
+
+function latlngInterPoint(lat1, lng1, lat2, lng2, offset)
+{
+    lat1 = lat1 * Math.PI / 180.0;
+    lng1 = lng1 * Math.PI / 180.0;
+    lat2 = lat2 * Math.PI / 180.0;
+    lng2 = lng2 * Math.PI / 180.0;
+
+    d = 2 * Math.asin(Math.sqrt(Math.pow((Math.sin((lat1 - lat2) / 2)), 2) +
+            Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin((lng1 - lng2) / 2), 2)));
+    A = Math.sin((1 - offset) * d) / Math.sin(d);
+    B = Math.sin(offset * d) / Math.sin(d);
+
+    x = A * Math.cos(lat1) * Math.cos(lng1) + B * Math.cos(lat2) * Math.cos(lng2);
+    y = A * Math.cos(lat1) * Math.sin(lng1) + B * Math.cos(lat2) * Math.sin(lng2);
+    z = A * Math.sin(lat1) + B * Math.sin(lat2);
+
+    lat = Math.atan2(z, Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))) * 180 / Math.PI;
+    lng = Math.atan2(y, x) * 180 / Math.PI;
+
+    return {
+        lat: lat,
+        lng: lng
+    };
+}
 
 
 // ship Control Points
 function generateControlPoints(radius)
 {
-    for (var f = start_ship_idx; f < end_ship_idx; ++f)
+    for (var j = 0; j < length; ++j)
     {
-        var start_lat = vessels[f]['slat'];
-        var start_lng = vessels[f]['slng'];
-        var end_lat = vessels[f]['elat'];
-        var end_lng = vessels[f]['elng'];
+        var s_lat = vessels[j]['slat'];
+        var s_lng = vessels[j]['slng'];
+
+        var e_lat = vessels[j]['elat'];
+        var e_lng = vessels[j]['elng'];
 
         // var max_height = Math.random() * 0.003; // original max_height is effected by random value
-        var max_height = 1.0 * 0.003; // change not obvious
-        var points = [];    // temp array
-        var spline_control_points = 8;
+        var max_height = 1.0 * 0.003;   // change not obvious
+        var points = [];                // temp array
 
-        for (var i = 0; i < spline_control_points + 1; i++)
+        var spline_pnts = 8;
+        for (var i = 0; i < spline_pnts + 1; i++)
         {
-            var arc_angle = i * 180.0 / spline_control_points;
+            var latlng = latlngInterPoint(s_lat, s_lng, e_lat, e_lng, i / spline_pnts); // last parameter is offset
+
+            var arc_angle = i * 180.0 / spline_pnts;
             var arc_radius = radius + (Math.sin(arc_angle * Math.PI / 180.0)) * max_height;
 
-            var latlng = latlngInterPoint(start_lat, start_lng, end_lat, end_lng, i / spline_control_points);
-
-            var pos = xyzFromLatLng(latlng.lat, latlng.lng, arc_radius); // with height
-            //var pos = xyzFromLatLng(latlng.lat, latlng.lng, 0.5);       // without height
+            var pos = xyzFromLatLng(latlng.lat, latlng.lng, arc_radius);   // with height
+            //var pos = xyzFromLatLng(latlng.lat, latlng.lng, 0.5);        // without height
             points.push(new THREE.Vector3(pos.x, pos.y, pos.z));
         }
 
-        //https://threejs.org/docs/api/extras/curves/SplineCurve3.html
+        // https://threejs.org/docs/api/extras/curves/SplineCurve3.html
         var spline = new THREE.SplineCurve3(points);
-        ship_path_splines.push(spline);   //ship_path_splines is a global array
+        path_splines.push(spline);   // path_splines is a global array
 
         var arc_length = spline.getLength();
-        ship_distance.push(arc_length);   //ship_distance is a global array
+        distance.push(arc_length);   // distance is a global array
 
-        setShipTimes(f); //set each ship point start and end time
+        setShipTimes(j); // set each ship point start and end time
     }
 }
+
+
 
 function shipPathLines() {
     var geometry = new THREE.BufferGeometry();
@@ -387,15 +404,15 @@ function shipPathLines() {
     var line_positions = new Float32Array(vessels.length * 3 * 2 * num_control_points);
     var colors = new Float32Array(vessels.length * 3 * 2 * num_control_points);
 
-    for (var i = start_ship_idx; i < end_ship_idx; ++i)
+    for (var i = 0; i < length; ++i)
     {
         for (var j = 0; j < num_control_points - 1; ++j)
         {
-            //ship_path_splines are generated in generateControlPoints
+            //path_splines are generated in generateControlPoints
             //refer: SplineCurve3.getPoint http://jsfiddle.net/epjfczz8/
-            var start_pos = ship_path_splines[i].getPoint(j / (num_control_points - 1));
-            console.log("ship_path_splines",i,ship_path_splines[i].getPoint(j / (num_control_points - 1)));
-            var end_pos = ship_path_splines[i].getPoint((j + 1) / (num_control_points - 1));
+            var start_pos = path_splines[i].getPoint(j / (num_control_points - 1));
+            console.log("path_splines",i,path_splines[i].getPoint(j / (num_control_points - 1)));
+            var end_pos = path_splines[i].getPoint((j + 1) / (num_control_points - 1));
 
             line_positions[(i * num_control_points + j) * 6 + 0] = start_pos.x;
             line_positions[(i * num_control_points + j) * 6 + 1] = start_pos.y;
@@ -430,7 +447,6 @@ function shipPathLines() {
     return new THREE.Line(geometry, material, THREE.LinePieces);
 }
 
-
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -443,21 +459,20 @@ function easeOutQuadratic(t, b, c, d) {
     return -c / 2 * ((--t) * (t - 2) - 1) + b;
 }
 
-
 //change the speed of the ship
 function update_ships() {
-    ship_point_cloud_geom.attributes.position.needsUpdate = true;
+    cloud_geom.attributes.position.needsUpdate = true;
 
-    for (var i = start_ship_idx; i < end_ship_idx; ++i) {
+    for (var i = 0; i < length; ++i) {
         if ( Date.now() > ship_point_start_time[i] ) {
             var ease_val = easeOutQuadratic(Date.now() - ship_point_start_time[i], 0, 1, ship_point_end_time[i] - ship_point_start_time[i]);
 
-            if (ease_val < 0 || ship_point_speed_changed) {
+            if (ease_val < 0 || speed_changed) {
                 ease_val = 0;
                 setShipTimes(i);
             }
 
-            var pos = ship_path_splines[i].getPoint(ease_val);
+            var pos = path_splines[i].getPoint(ease_val);
             positions[3 * i + 0] = pos.x;
             positions[3 * i + 1] = pos.y;
             positions[3 * i + 2] = pos.z;
@@ -518,14 +533,12 @@ function animate(time) {
     }
 
     stats.update();
-    sphere.rotation.y += 0.0005;
+    earth.rotation.y += 0.0005;
     clouds.rotation.y += 0.00048;
     ships.rotation.y += 0.0005;
-    ship_path_lines.rotation.y += 0.0005;
+    path_lines.rotation.y += 0.0005;
     renderer.render(scene, camera);
 }
-
-
 
 function author()
 {

@@ -6,14 +6,14 @@ var camera, scene, renderer, controls, stats;
 var length = vessels.length;  // how many ship points
 
 var positions, sizes;
-var cloud_geom;
+var point_cloud;
 
 var path_splines = [];
 var distance = [];
 
 var path_lines;
-var ship_point_start_time = [];
-var ship_point_end_time = [];
+var point_s_time = [];
+var point_e_time = [];
 
 var speed_changed = false;
 var speed_scaling = 1.0;
@@ -31,7 +31,8 @@ var segments = 64;
 var rotation = 0;
 var is_loading = false;
 
-function start_app() {
+function start_app()
+{
     init();
     animate();
 }
@@ -57,32 +58,27 @@ function init() {
     of the objects (earth and stars) we want to render.*/
     scene = new THREE.Scene();
 
-
     // add Earth
-    earth = createEarth(radius, segments); // radius = 0.5; defined at the beginning
+    earth = createEarth(radius, segments);        // radius = 0.5; defined at the beginning
     earth.rotation.y = rotation;
     scene.add(earth)
 
-
     // add Cloud
-    clouds = createClouds(radius, segments); // radius is the same as earth but + 0.001 when define a new sphere
+    clouds = createClouds(radius, segments);     // radius is the same as earth but + 0.0025 when define a new sphere
     clouds.rotation.y = rotation;
     scene.add(clouds)
 
-
     // add Stars
-    var stars = createStars(90, 64);    // radius = 90, much bigger than the earth
+    var stars = createStars(90, 64);                // radius = 90, much bigger than the earth 0.5
     scene.add(stars);
-
 
     // add AmbientLight
     scene.add(new THREE.AmbientLight(0x777777));
 
-
     // add DirectionalLight
-    var directLight = new THREE.DirectionalLight(0xffffff, 0.15); // white,
-    directLight.position.set(5, 3, 5);
-    scene.add(directLight);
+    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.15); // white,
+    directionalLight.position.set(5, 3, 5);
+    scene.add(directionalLight);
 
     //--------------------------------------------------------------------------
     // point is texture mapping, default color is random, vertex shader and fragment shader used here
@@ -111,7 +107,7 @@ function init() {
 
     gui.add(this, 'ship_point_size', 0.01, 0.2).name("Size").onChange(function(value)
     {
-        cloud_geom.attributes.size.needsUpdate = true;
+        point_cloud.attributes.size.needsUpdate = true;
         for (var i = 0; i < length; ++i)
         {
             sizes[i] = ship_point_size;
@@ -132,7 +128,7 @@ function init() {
     gui.add(this, "handle_about").name("Hongyan Yi| Credits");
 
     /*
-     TrackballControls.js is in the js/controls sub-directory of the examples directory.
+     TrackballControls.js is in the js sub-directory of the examples directory.
      which allows you to rotate, zoom and pan the scene.
      https://github.com/mrdoob/three.js/tree/master/examples/js/controls
      It is part of the examples -- not the library. You must include it explicitly in your project.
@@ -144,8 +140,9 @@ function init() {
     controls.noZoom = false;
     controls.noPan = true;
     controls.staticMoving = false;
-    controls.minDistance = 0.75;  // zoomin level,if two small, might have frame buffer problem
-    controls.maxDistance = 3.0;   // zoomin outlevel
+    controls.minDistance = 0.75;  // zoom in level,if two small, might have frame buffer problem
+    // controls.minDistance = 0.05;  // zoom in level,if two small, might have frame buffer problem
+    controls.maxDistance = 3.0;   // zoom out level
 
     // http://matthewcasperson.blogspot.com/2013/11/threejs-2-getting-started-part-2.html
     // If you click on the stats counter, you will switch between two views.
@@ -162,7 +159,8 @@ function init() {
 }
 
 
-function createEarth(radius, segments) {
+function createEarth(radius, segments)
+{
     return new THREE.Mesh(
         /* second and third parameter is the number of width and height segments.
          The earth is drawn as a polygon mesh, and by adding more segments
@@ -187,10 +185,11 @@ function createEarth(radius, segments) {
             bumpMap:     THREE.ImageUtils.loadTexture('images/bump_surface.jpg'),
             bumpScale:   0.005,
             specularMap: THREE.ImageUtils.loadTexture('images/water.png'),
-            specular:    new THREE.Color('grey')
+            specular:    new THREE.Color('white')
         })
     );
 }
+
 
 /*
  I couldn't use this JPEG directly in three.js, so I used this technique to make a transparent PNG
@@ -198,7 +197,7 @@ function createEarth(radius, segments) {
  */
 function createClouds(radius, segments) {
     return new THREE.Mesh(
-        new THREE.SphereGeometry(radius + 0.001, segments, segments),
+        new THREE.SphereGeometry(radius + 0.0025, segments, segments),
         new THREE.MeshPhongMaterial({
             map: THREE.ImageUtils.loadTexture('images/clouds.png'),
             transparent: true
@@ -208,7 +207,7 @@ function createClouds(radius, segments) {
 
 
 /*
- The starfield is created by adding a large earth around the Earth and project the star texture on
+ The starfield is created by adding a large sphere around the Earth and project the star texture on
  the backside or inside:
  var stars = createStars(90, 64);
  scene.add(stars);
@@ -225,31 +224,18 @@ function createStars(radius, segments) {
 }
 
 
-// set each ship point start and end time
-function setShipTimes(index)
-{
-    var scaling_factor = (speed_scaling - min_scaling) /
-        (max_scaling - min_scaling);
-
-    var duration = (1-scaling_factor) * distance[index] * 80000;   //distance[index] arc_length for each ship
-
-    var start_time = Date.now() + Math.random() * 5000; // ??? random
-    ship_point_start_time[index] = start_time;
-    ship_point_end_time[index] = start_time + duration;
-}
-
-
 // create point cloud using shader
 function createPointCloud()
 {
-    cloud_geom = new THREE.BufferGeometry();
+    point_cloud = new THREE.BufferGeometry();
     n_pnt = vessels.length;
 
     positions = new Float32Array(n_pnt * 3); // positions and sizes are global variables
     sizes = new Float32Array(n_pnt);
     var colors = new Float32Array(n_pnt * 3); // color is temp variable
 
-    for (var i = 0; i < n_pnt; i++) {
+    for (var i = 0; i < n_pnt; i++)
+    {
         positions[3 * i + 0] = 0;   // original position are the same
         positions[3 * i + 1] = 0;
         positions[3 * i + 2] = 0;
@@ -265,10 +251,13 @@ function createPointCloud()
         colors[3 * i + 2] = 1.0;
     }
 
-    cloud_geom.addAttribute('position', new THREE.BufferAttribute(positions, 3));
-    cloud_geom.addAttribute('customColor', new THREE.BufferAttribute(colors, 3));
-    cloud_geom.addAttribute('size', new THREE.BufferAttribute(sizes, 1));
-    cloud_geom.computeBoundingBox();
+    point_cloud.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+    point_cloud.addAttribute('customColor', new THREE.BufferAttribute(colors, 3));
+    point_cloud.addAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    point_cloud.computeBoundingBox();
+    /* Computes bounding box of the geometry, updating. boundingBox attribute.
+       Bounding boxes aren't computed by default.
+       They need to be explicitly computed, otherwise they are null.*/
 
     var uniforms = {
         color: {
@@ -293,31 +282,17 @@ function createPointCloud()
     };
 
     var shaderMaterial = new THREE.ShaderMaterial({
-        uniforms: uniforms,
+        uniforms: uniforms, // color and texture the image
         attributes: attributes,
         vertexShader: document.getElementById('vertexshader').textContent,
         fragmentShader: document.getElementById('fragmentshader').textContent,
-        blending: THREE.AdditiveBlending,   //what is blending? difference between additive blending & NormalBlending?
+        blending: THREE.AdditiveBlending,   // what is blending? difference between additive blending & NormalBlending?
         // blending: THREE.NormalBlending,
         depthTest: true,
         depthWrite: false,
         transparent: true
     });
-
-    return new THREE.PointCloud(cloud_geom, shaderMaterial);
-}
-
-
-function xyzFromLatLng(lat, lng, radius)
-{
-    var phi = (90 - lat) * Math.PI / 180;
-    var theta = (360 - lng) * Math.PI / 180;
-
-    return {
-        x: radius * Math.sin(phi) * Math.cos(theta),
-        y: radius * Math.cos(phi),
-        z: radius * Math.sin(phi) * Math.sin(theta)
-    };
+    return new THREE.PointCloud(point_cloud, shaderMaterial);
 }
 
 
@@ -347,50 +322,100 @@ function latlngInterPoint(lat1, lng1, lat2, lng2, offset)
 }
 
 
+function xyzFromLatLng(lat, lon, radius)
+{
+    var phi = (90 - lat) * Math.PI / 180;
+    var theta = (360 - lng) * Math.PI / 180;
+
+    return {
+        x: radius * Math.sin(phi) * Math.cos(theta),
+        y: radius * Math.cos(phi),
+        z: radius * Math.sin(phi) * Math.sin(theta)
+    };
+
+    // var cosLat = Math.cos(lat * Math.PI / 180.0);
+    // var sinLat = Math.sin(lat * Math.PI / 180.0);
+    // var cosLon = Math.cos(lon * Math.PI / 180.0);
+    // var sinLon = Math.sin(lon * Math.PI / 180.0);
+    // var rad = 500.0;
+    // return
+    // {
+    //     x: rad * cosLat * cosLon;
+    //     z: rad * cosLat * sinLon;
+    //     y: rad * sinLat;
+    // };
+
+}
+
+
+// set each ship point start and end time
+function setShipTimes(index)
+{
+    var start_time = Date.now() + Math.random() * 5000;             // ??? random
+    point_s_time[index] = start_time;
+    
+    var scaling_factor = (speed_scaling - min_scaling) / (max_scaling - min_scaling);
+    var duration = (1-scaling_factor) * distance[index] * 80000;   // distance[index] arc_length for each ship
+    point_e_time[index] = start_time + duration;
+}
+
+
 // ship Control Points
 function generateControlPoints(radius)
 {
-    for (var j = 0; j < length; ++j)
+    for (var i = 0; i < length; ++i)
     {
-        var s_lat = vessels[j]['slat'];
-        var s_lng = vessels[j]['slng'];
+        var s_lat = vessels[i]['slat'];
+        var s_lng = vessels[i]['slng'];
 
-        var e_lat = vessels[j]['elat'];
-        var e_lng = vessels[j]['elng'];
+        var e_lat = vessels[i]['elat'];
+        var e_lng = vessels[i]['elng'];
 
-        // var max_height = Math.random() * 0.003; // original max_height is effected by random value
-        var max_height = 1.0 * 0.003;   // change not obvious
+        var max_height = Math.random() * 0.003; // original max_height is effected by random value
+        //var max_height = 1.0 * 0.003;   // change not obvious
+        //var max_height = 100.0 * 0.003;   // height is very obvious
         var points = [];                // temp array
 
-        var spline_pnts = 8;
-        for (var i = 0; i < spline_pnts + 1; i++)
+        var num_pnts = 8;
+        for (var j = 0; j < num_pnts + 1; j++)
         {
-            var latlng = latlngInterPoint(s_lat, s_lng, e_lat, e_lng, i / spline_pnts); // last parameter is offset
+            var latlng = latlngInterPoint(s_lat, s_lng, e_lat, e_lng, j / num_pnts); // last parameter is offset
 
-            var arc_angle = i * 180.0 / spline_pnts;
-            var arc_radius = radius + (Math.sin(arc_angle * Math.PI / 180.0)) * max_height;
+            // var arc_angle = j * 180.0 / num_pnts;
+            // var arc_radius = radius + (Math.sin(arc_angle * Math.PI / 180.0)) * max_height;
 
-            var pos = xyzFromLatLng(latlng.lat, latlng.lng, arc_radius);   // with height
-            //var pos = xyzFromLatLng(latlng.lat, latlng.lng, 0.5);        // without height
+            var arc_radius = radius + (Math.sin(j / num_pnts * Math.PI)) * max_height; // save two loc to one loc
+
+            // var arc_radius = radius; // effect: this way all the ships are within the earth, could not see if not zoom into it.
+            var pos = xyzFromLatLng(latlng.lat, latlng.lng, arc_radius);
+            // var pos = xyzFromLatLng(latlng.lat, latlng.lng, radius); // new radius must
+            /*
+                each position is generated from the start and end longitude and latitude,and offset.
+                each points array has 9 positions in it.
+            */
             points.push(new THREE.Vector3(pos.x, pos.y, pos.z));
         }
 
-        // https://threejs.org/docs/api/extras/curves/SplineCurve3.html
+        /*
+           https://threejs.org/docs/api/extras/curves/SplineCurve3.html
+           each pair of start and end point generate a spline
+           path_splines save (length amount) spline in an array
+        */
         var spline = new THREE.SplineCurve3(points);
         path_splines.push(spline);   // path_splines is a global array
 
         var arc_length = spline.getLength();
         distance.push(arc_length);   // distance is a global array
 
-        setShipTimes(j); // set each ship point start and end time
+        setShipTimes(i); // set each ship point start and end time
     }
 }
 
 
-
-function shipPathLines() {
-    var geometry = new THREE.BufferGeometry();
-    var material = new THREE.LineBasicMaterial({
+function shipPathLines() 
+{
+    var line_geom = new THREE.BufferGeometry();
+    var line_material = new THREE.LineBasicMaterial({
         color: 0xffffff,
         vertexColors: THREE.VertexColors,
         transparent: true,
@@ -400,51 +425,54 @@ function shipPathLines() {
         linewidth: 0.003
     });
 
-    var num_control_points = 32;
-    var line_positions = new Float32Array(vessels.length * 3 * 2 * num_control_points);
-    var colors = new Float32Array(vessels.length * 3 * 2 * num_control_points);
+    // var ctrl_pnts = 32;
+    var ctrl_pnts = 8;
+    var line_pos = new Float32Array(vessels.length * 6 * ctrl_pnts);
+    var colors = new Float32Array(vessels.length * 6 * ctrl_pnts);
 
     for (var i = 0; i < length; ++i)
     {
-        for (var j = 0; j < num_control_points - 1; ++j)
+        for (var j = 0; j < ctrl_pnts - 1; ++j)
         {
-            //path_splines are generated in generateControlPoints
+            /* path_splines are generated in generateControlPoints
             //refer: SplineCurve3.getPoint http://jsfiddle.net/epjfczz8/
-            var start_pos = path_splines[i].getPoint(j / (num_control_points - 1));
-            console.log("path_splines",i,path_splines[i].getPoint(j / (num_control_points - 1)));
-            var end_pos = path_splines[i].getPoint((j + 1) / (num_control_points - 1));
+             .getPoint(t)
+             Returns a vector for point t of the curve where t is between 0 and 1. Must be implemented in the extending class.
+            */
+            var s_pos = path_splines[i].getPoint(j / (ctrl_pnts - 1));
+            var e_pos = path_splines[i].getPoint((j + 1) / (ctrl_pnts - 1));
 
-            line_positions[(i * num_control_points + j) * 6 + 0] = start_pos.x;
-            line_positions[(i * num_control_points + j) * 6 + 1] = start_pos.y;
-            line_positions[(i * num_control_points + j) * 6 + 2] = start_pos.z;
+            line_pos[(i * ctrl_pnts + j) * 6 + 0] = s_pos.x;
+            line_pos[(i * ctrl_pnts + j) * 6 + 1] = s_pos.y;
+            line_pos[(i * ctrl_pnts + j) * 6 + 2] = s_pos.z;
 
-            line_positions[(i * num_control_points + j) * 6 + 3] = end_pos.x;
-            line_positions[(i * num_control_points + j) * 6 + 4] = end_pos.y;
-            line_positions[(i * num_control_points + j) * 6 + 5] = end_pos.z;
+            line_pos[(i * ctrl_pnts + j) * 6 + 3] = e_pos.x;
+            line_pos[(i * ctrl_pnts + j) * 6 + 4] = e_pos.y;
+            line_pos[(i * ctrl_pnts + j) * 6 + 5] = e_pos.z;
 
-            // colors[(i * num_control_points + j) * 6 + 0] = 1.0;
-            // colors[(i * num_control_points + j) * 6 + 1] = 0.4;
-            // colors[(i * num_control_points + j) * 6 + 2] = 1.0;
+            // colors[(i * ctrl_pnts + j) * 6 + 0] = 1.0;
+            // colors[(i * ctrl_pnts + j) * 6 + 1] = 0.4;
+            // colors[(i * ctrl_pnts + j) * 6 + 2] = 1.0;
             //
-            // colors[(i * num_control_points + j) * 6 + 3] = 1.0;
-            // colors[(i * num_control_points + j) * 6 + 4] = 0.4;// make the line color to pink
-            // colors[(i * num_control_points + j) * 6 + 5] = 1.0;
+            // colors[(i * ctrl_pnts + j) * 6 + 3] = 1.0;
+            // colors[(i * ctrl_pnts + j) * 6 + 4] = 0.4;// make the line color to pink
+            // colors[(i * ctrl_pnts + j) * 6 + 5] = 1.0;
 
-            colors[(i * num_control_points + j) * 6 + 0] = 3.0;
-            colors[(i * num_control_points + j) * 6 + 1] = 0.2;
-            colors[(i * num_control_points + j) * 6 + 2] = 0.2;
+            colors[(i * ctrl_pnts + j) * 6 + 0] = 1.0;
+            colors[(i * ctrl_pnts + j) * 6 + 1] = 0.2;
+            colors[(i * ctrl_pnts + j) * 6 + 2] = 0.2;
 
-            colors[(i * num_control_points + j) * 6 + 3] = 0.2;
-            colors[(i * num_control_points + j) * 6 + 4] = 3.0;
-            colors[(i * num_control_points + j) * 6 + 5] = 0.2;
+            colors[(i * ctrl_pnts + j) * 6 + 3] = 0.2;
+            colors[(i * ctrl_pnts + j) * 6 + 4] = 1.0;
+            colors[(i * ctrl_pnts + j) * 6 + 5] = 0.2;
         }
     }
 
-    geometry.addAttribute('position', new THREE.BufferAttribute(line_positions, 3));
-    geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3));
-    geometry.computeBoundingSphere();
+    line_geom.addAttribute('position', new THREE.BufferAttribute(line_pos, 3));
+    line_geom.addAttribute('color', new THREE.BufferAttribute(colors, 3));
+    line_geom.computeBoundingSphere();
 
-    return new THREE.Line(geometry, material, THREE.LinePieces);
+    return new THREE.Line(line_geom, line_material, THREE.LinePieces);
 }
 
 function onWindowResize() {
@@ -461,13 +489,16 @@ function easeOutQuadratic(t, b, c, d) {
 
 //change the speed of the ship
 function update_ships() {
-    cloud_geom.attributes.position.needsUpdate = true;
+    point_cloud.attributes.position.needsUpdate = true;
 
-    for (var i = 0; i < length; ++i) {
-        if ( Date.now() > ship_point_start_time[i] ) {
-            var ease_val = easeOutQuadratic(Date.now() - ship_point_start_time[i], 0, 1, ship_point_end_time[i] - ship_point_start_time[i]);
+    for (var i = 0; i < length; ++i)
+    {
+        if ( Date.now() > point_s_time[i] )
+        {
+            var ease_val = easeOutQuadratic(Date.now() - point_s_time[i], 0, 1, point_e_time[i] - point_s_time[i]);
 
-            if (ease_val < 0 || speed_changed) {
+            if (ease_val < 0 || speed_changed)
+            {
                 ease_val = 0;
                 setShipTimes(i);
             }

@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="619781af-c383-472d-9144-4d5e4cce448e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/test.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/app.js" afterPath="$PROJECT_DIR$/js/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test.js" afterPath="$PROJECT_DIR$/js/test.js" />
     </list>
     <ignored path="3D_Web_Mapping_AISData.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,12 +29,11 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="516">
-              <caret line="392" column="25" selection-start-line="392" selection-start-column="25" selection-end-line="392" selection-end-column="25" />
+            <state relative-caret-position="1650">
+              <caret line="328" column="0" selection-start-line="328" selection-start-column="0" selection-end-line="328" selection-end-column="0" />
               <folding>
                 <element signature="n#!!block;n#createEarth#0" expanded="false" />
                 <element signature="n#!!block;n#createClouds#0" expanded="false" />
-                <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
                 <element signature="n#!!block;n#author#0" expanded="false" />
               </folding>
             </state>
@@ -45,8 +43,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="44" column="70" selection-start-line="44" selection-start-column="70" selection-end-line="44" selection-end-column="70" />
+            <state relative-caret-position="148">
+              <caret line="43" column="39" selection-start-line="43" selection-start-column="39" selection-end-line="43" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -128,6 +126,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Ship_Movements_On_3D_Earth" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Ship_Movements_On_3D_Earth" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Ship_Movements_On_3D_Earth" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -222,18 +234,18 @@
       <workItem from="1490822554502" duration="2893000" />
       <workItem from="1490906650977" duration="74344000" />
       <workItem from="1492031741135" duration="55045000" />
-      <workItem from="1493072466945" duration="8911000" />
+      <workItem from="1493072466945" duration="21219000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="165381000" />
+    <option name="totallyTimeSpent" value="177689000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="-11" width="1942" height="1162" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1092925" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13357973" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -294,7 +306,6 @@
           <folding>
             <element signature="n#!!block;n#createEarth#0" expanded="false" />
             <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#author#0" expanded="false" />
           </folding>
         </state>
@@ -323,7 +334,6 @@
           <folding>
             <element signature="n#!!block;n#createEarth#0" expanded="false" />
             <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#author#0" expanded="false" />
           </folding>
         </state>
@@ -360,7 +370,6 @@
           <folding>
             <element signature="n#!!block;n#createEarth#0" expanded="false" />
             <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#author#0" expanded="false" />
           </folding>
         </state>
@@ -381,7 +390,6 @@
           <folding>
             <element signature="n#!!block;n#createEarth#0" expanded="false" />
             <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#author#0" expanded="false" />
           </folding>
         </state>
@@ -402,7 +410,6 @@
           <folding>
             <element signature="n#!!block;n#createEarth#0" expanded="false" />
             <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#author#0" expanded="false" />
           </folding>
         </state>
@@ -423,7 +430,6 @@
           <folding>
             <element signature="n#!!block;n#createEarth#0" expanded="false" />
             <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#author#0" expanded="false" />
           </folding>
         </state>
@@ -444,7 +450,6 @@
           <folding>
             <element signature="n#!!block;n#createEarth#0" expanded="false" />
             <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#author#0" expanded="false" />
           </folding>
         </state>
@@ -480,7 +485,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/ais.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="37">
+        <state relative-caret-position="-6068">
           <caret line="1" column="112" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="112" />
           <folding />
         </state>
@@ -488,28 +493,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3404">
-          <caret line="92" column="3" selection-start-line="92" selection-start-column="3" selection-end-line="92" selection-end-column="3" />
+        <state relative-caret-position="-155">
+          <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="44" column="70" selection-start-line="44" selection-start-column="70" selection-end-line="44" selection-end-column="70" />
+        <state relative-caret-position="148">
+          <caret line="43" column="39" selection-start-line="43" selection-start-column="39" selection-end-line="43" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="516">
-          <caret line="392" column="25" selection-start-line="392" selection-start-column="25" selection-end-line="392" selection-end-column="25" />
+        <state relative-caret-position="1650">
+          <caret line="328" column="0" selection-start-line="328" selection-start-column="0" selection-end-line="328" selection-end-column="0" />
           <folding>
             <element signature="n#!!block;n#createEarth#0" expanded="false" />
             <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#author#0" expanded="false" />
           </folding>
         </state>

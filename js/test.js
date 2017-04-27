@@ -105,3 +105,16 @@ var uniforms = {
         value: THREE.ImageUtils.loadTexture("images/point.png")
     }
 };
+
+
+function latLngToXYZ(lat, lng, radius)
+{
+    var LAT = lat * Math.PI / 180;
+    var LON = lng * Math.PI / 180;
+
+    return {
+        x: radius * Math.cos(LAT) * Math.cos(LON),
+        y: radius * Math.sin(LAT),
+        z: (-1) * radius * Math.cos(LAT) * Math.sin(LON)
+    };
+}

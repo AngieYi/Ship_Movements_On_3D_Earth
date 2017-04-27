@@ -308,12 +308,18 @@ function latlngInterPoint(lat1, lng1, lat2, lng2, offset)
     A = Math.sin((1 - offset) * d) / Math.sin(d);
     B = Math.sin(offset * d) / Math.sin(d);
 
-    x = A * Math.cos(lat1) * Math.cos(lng1) + B * Math.cos(lat2) * Math.cos(lng2);
-    y = A * Math.cos(lat1) * Math.sin(lng1) + B * Math.cos(lat2) * Math.sin(lng2);
-    z = A * Math.sin(lat1) + B * Math.sin(lat2);
+    // x = A * Math.cos(lat1) * Math.cos(lng1) + B * Math.cos(lat2) * Math.cos(lng2);
+    // y = A * Math.cos(lat1) * Math.sin(lng1) + B * Math.cos(lat2) * Math.sin(lng2);
+    // z = A * Math.sin(lat1) + B * Math.sin(lat2);
+    // lat = Math.atan2(z, Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))) * 180 / Math.PI;
+    // lng = Math.atan2(y, x) * 180 / Math.PI;
 
-    lat = Math.atan2(z, Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))) * 180 / Math.PI;
-    lng = Math.atan2(y, x) * 180 / Math.PI;
+    x = A * Math.cos(lat1) * Math.cos(lng1) + B * Math.cos(lat2) * Math.cos(lng2);
+    y = A * Math.sin(lat1) + B * Math.sin(lat2);
+    z = (-1) * A * Math.cos(lat1) * Math.sin(lng1) + (-1) * B * Math.cos(lat2) * Math.sin(lng2);
+
+    lat = Math.atan2(y, Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2))) * 180 / Math.PI;
+    lng = (-1) * Math.atan2(z, x) * 180 / Math.PI;
 
     return {
         lat: lat,
@@ -322,28 +328,26 @@ function latlngInterPoint(lat1, lng1, lat2, lng2, offset)
 }
 
 
-function xyzFromLatLng(lat, lon, radius)
+function latLngToXYZ(lat, lng, radius)
 {
-    var phi = (90 - lat) * Math.PI / 180;
-    var theta = (360 - lng) * Math.PI / 180;
+    // var phi = (90 - lat) * Math.PI / 180;
+    // var theta = (360 - lng) * Math.PI / 180;
+    //
+    // return {
+    //     x: radius * Math.sin(phi) * Math.cos(theta),
+    //     y: radius * Math.cos(phi),
+    //     z: radius * Math.sin(phi) * Math.sin(theta)
+    // };
+
+
+    var LAT = lat * Math.PI / 180;
+    var LON = lng * Math.PI / 180;
 
     return {
-        x: radius * Math.sin(phi) * Math.cos(theta),
-        y: radius * Math.cos(phi),
-        z: radius * Math.sin(phi) * Math.sin(theta)
+        x: radius * Math.cos(LAT) * Math.cos(LON),
+        y: radius * Math.sin(LAT),
+        z: (-1) * radius * Math.cos(LAT) * Math.sin(LON)
     };
-
-    // var cosLat = Math.cos(lat * Math.PI / 180.0);
-    // var sinLat = Math.sin(lat * Math.PI / 180.0);
-    // var cosLon = Math.cos(lon * Math.PI / 180.0);
-    // var sinLon = Math.sin(lon * Math.PI / 180.0);
-    // var rad = 500.0;
-    // return
-    // {
-    //     x: rad * cosLat * cosLon;
-    //     z: rad * cosLat * sinLon;
-    //     y: rad * sinLat;
-    // };
 
 }
 
@@ -384,16 +388,15 @@ function generateControlPoints(radius)
             // var arc_angle = j * 180.0 / num_pnts;
             // var arc_radius = radius + (Math.sin(arc_angle * Math.PI / 180.0)) * max_height;
 
-            var arc_radius = radius + (Math.sin(j / num_pnts * Math.PI)) * max_height; // save two loc to one loc
+            var arc_radius = radius + Math.sin(j / num_pnts * Math.PI) * max_height; // save two loc to one loc
+            // var arc_radius = radius; // if doing this way,then all the ships are within the earth, could not see if not zoom into it.
+            var posXYZ = latLngToXYZ(latlng.lat, latlng.lng, arc_radius);
 
-            // var arc_radius = radius; // effect: this way all the ships are within the earth, could not see if not zoom into it.
-            var pos = xyzFromLatLng(latlng.lat, latlng.lng, arc_radius);
-            // var pos = xyzFromLatLng(latlng.lat, latlng.lng, radius); // new radius must
             /*
                 each position is generated from the start and end longitude and latitude,and offset.
                 each points array has 9 positions in it.
             */
-            points.push(new THREE.Vector3(pos.x, pos.y, pos.z));
+            points.push(new THREE.Vector3(posXYZ.x, posXYZ.y, posXYZ.z));
         }
 
         /*

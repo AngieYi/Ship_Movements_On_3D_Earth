@@ -12,16 +12,16 @@ var path_splines = [];
 var distance = [];
 
 var path_lines;
-var point_s_time = [];
-var point_e_time = [];
+var startTime = [];
+var endTime = [];
 
 var speed_changed = false;
-var speed_scaling = 1.0;
-var min_scaling = 1.0;
-var max_scaling = 25.0;
+var speedScale = 1.0;
+var minScale = 1.0;
+var maxScale = 25.0;
 
 var ship_track_opacity = 0;
-var ship_point_size = 0.015;
+var ship_point_size = 0.01;
 
 var earth = 0;
 var ships = 0;
@@ -114,7 +114,7 @@ function init() {
         }
     });
 
-    gui.add(this, 'speed_scaling', min_scaling, max_scaling).name("Speed").onFinishChange(function(value)
+    gui.add(this, 'speedScale', minScale, maxScale).name("Speed").onFinishChange(function(value)
     {
         speed_changed = true;
         update_ships();    // update speed and position?
@@ -333,12 +333,13 @@ function latLngToXYZ(lat, lng, radius)
 // set each ship point start and end time
 function setShipTimes(index)
 {
-    var start_time = Date.now() + Math.random() * 5000;             // ??? random
-    point_s_time[index] = start_time;
-    
-    var scale = (speed_scaling - min_scaling) / (max_scaling - min_scaling);
+    // var start_time = Date.now() + Math.random() * 5000;
+    var start_time = Date.now() + 5000;
+    startTime[index] = start_time;
+
+    var scale = (speedScale - minScale) / (maxScale - minScale);
     var duration = (1-scale) * distance[index] * 80000;   // distance[index] arc_length for each ship
-    point_e_time[index] = start_time + duration;
+    endTime[index] = start_time + duration;
 }
 
 
@@ -368,7 +369,7 @@ function generateControlPoints(radius)
             // it seems unnecessary, since all the points are finally put into the splineCurve.
             // var arc_radius = radius + Math.sin(t * Math.PI) * max_height;
 
-            // var arc_radius = radius + 0.005; // when some ships moving, others might temp static
+            var arc_radius = radius + 0.005; // when some ships moving, others might temp static
             // var arc_radius = radius; // without extra height,all ships within earth, ships not see unless zoom in.
 
             var posXYZ = latLngToXYZ(latlng.lat, latlng.lng, arc_radius);
@@ -396,7 +397,7 @@ function generateControlPoints(radius)
 }
 
 
-function shipPathLines() 
+function shipPathLines()
 {
     var lineBufGeom = new THREE.BufferGeometry();
 
@@ -459,23 +460,28 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function easeOutQuadratic(t, b, c, d) {
-    if ((t /= d / 2) < 1)
+function easeOutQuadratic(t, b, c, d)
+{
+    t /= d / 2;
+    if (t < 1) // less than half
         return c / 2 * t * t + b;
-    return -c / 2 * ((--t) * (t - 2) - 1) + b;
+    --t;       // more than half
+    return -c / 2 * (t * (t - 2) - 1) + b;
 }
 
-// change the speed of the ship
-function update_ships() {
+
+// change the position of the ship
+function update_ships()
+{
     pointBufGeo.attributes.position.needsUpdate = true;
 
     for (var i = 0; i < length; ++i)
     {
-        if ( Date.now() > point_s_time[i] )
+        if ( Date.now() > startTime[i] )
         {
-            var ease_val = easeOutQuadratic(Date.now() - point_s_time[i], 0, 1, point_e_time[i] - point_s_time[i]);
+            var ease_val = easeOutQuadratic(Date.now() - startTime[i], 0, 1, endTime[i] - startTime[i]);
 
-            if (ease_val < 0 || speed_changed)
+            if (ease_val < 0 || speed_changed)  // deceleration speed
             {
                 ease_val = 0;
                 setShipTimes(i);
@@ -488,6 +494,7 @@ function update_ships() {
         }
     }
 }
+
 
 function show_about(visible) {
     if (visible) {

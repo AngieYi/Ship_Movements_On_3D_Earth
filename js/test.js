@@ -1,4 +1,48 @@
 
+function show_loading(visible)
+{
+    if (visible)
+    {
+        is_loading = true;
+        document.getElementById("loading_overlay").className = "show";
+        document.getElementById("loading_overlay").style.pointerEvents = "all";
+    }
+    else
+    {
+        is_loading = false;
+        document.getElementById("loading_overlay").className = "hide";
+        document.getElementById("loading_overlay").style.pointerEvents = "none";
+    }
+}
+
+
+
+var gui = new dat.GUI();
+
+gui.add(this, 'pointSize', 0.01, 0.2).name("Size").onChange(function(value)
+{
+    pointBufGeo.attributes.size.needsUpdate = true;
+    for (var i = 0; i < length; ++i)
+    {
+        sizes[i] = pointSize;
+    }
+});
+
+gui.add(this, 'speedScale', minScale, maxScale).name("Speed").onFinishChange(function(value)
+{
+    speed_changed = true;
+    update_ships();
+    speed_changed = false;
+});
+
+gui.add(this, 'lineOpacity', 0, 1.0).name("Track Opacity").onChange(function(value) {
+    path_lines.material.opacity = value;
+});
+
+gui.add(this, "handle_About").name("Hongyan Yi| Credits");
+
+
+
 
 
 function easeOutQuadratic(t, b, c, d)
@@ -9,6 +53,30 @@ function easeOutQuadratic(t, b, c, d)
     --t;
     return -c / 2 * (t * (t - 2) - 1) + b;
 }
+
+function update_ships()
+{
+    pointBufGeo.attributes.position.needsUpdate = true;
+    for (var i = 0; i < length; ++i)
+    {
+        if ( Date.now() > startTime[i] )
+        {
+            var ease_val = easeOutQuadratic(Date.now() - startTime[i], 0, 1, endTime[i] - startTime[i]);
+            if (ease_val < 0 || speed_changed)
+            {
+                ease_val = 0;
+                setShipTimes(i);
+            }
+            var pos = path_splines[i].getPoint(ease_val);
+            positions[3 * i + 0] = pos.x;
+            positions[3 * i + 1] = pos.y;
+            positions[3 * i + 2] = pos.z;
+        }
+    }
+}
+
+
+
 
 
 // ship Control Points
@@ -45,8 +113,8 @@ function shipPathLines()
 {
     var lineBufGeom = new THREE.BufferGeometry();
     var ctrl_pnts = 32;
-    var vertices = new Float32Array(vessels.length * 6 * ctrl_pnts);
-    var colors = new Float32Array(vessels.length * 6 * ctrl_pnts);
+    var vertices = new Float32Array(length * 6 * ctrl_pnts);
+    var colors = new Float32Array(length * 6 * ctrl_pnts);
 
     for (var i = 0; i < length; ++i)
     {

@@ -20,8 +20,8 @@ var speedScale = 1.0;
 var minScale = 1.0;
 var maxScale = 25.0;
 
-var ship_track_opacity = 0;
-var ship_point_size = 0.01;
+var lineOpacity = 0.01;
+var pointSize = 0.01;
 
 var earth = 0;
 var ships = 0;
@@ -31,131 +31,21 @@ var segments = 64;
 var rotation = 0;
 var is_loading = false;
 
-function start_app()
+
+function show_loading(visible)
 {
-    init();
-    animate();// after init then animate
-}
-
-function init() {
-    show_loading(true); //at the beginning, loading gif exists
-
-    /* The renderer is responsible to render the scene in the browsers.
-     Three.js supports different renderers like WebGL,Canvas,SVG and CSS 3D.*/
-    renderer = new THREE.WebGLRenderer();
-    renderer.setClearColor(0x000000, 1.0); // Sets the clear color and opacity.
-    renderer.setPixelRatio(window.devicePixelRatio); // Sets device pixel ratio. This is usually used for HiDPI device to prevent bluring output canvas.
-    renderer.setSize(window.innerWidth, window.innerHeight); // use window width and height to allow our earth to fill the browser window
-    document.body.appendChild(renderer.domElement);
-
-
-    // The camera determines what we'll see when we render the scene.
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 100);
-    camera.position.z = 1.5;
-
-
-    /* The scene is the container used to store and keep track
-    of the objects (earth and stars) we want to render.*/
-    scene = new THREE.Scene();
-
-    // add Earth
-    earth = createEarth(radius, segments);        // radius = 0.5; defined at the beginning
-    earth.rotation.y = rotation;
-    scene.add(earth)
-
-    // add Cloud
-    clouds = createClouds(radius, segments);     // radius is the same as earth but + 0.0025 when define a new sphere
-    clouds.rotation.y = rotation;
-    scene.add(clouds)
-
-    // add Stars
-    var stars = createStars(90, 64);                // radius = 90, much bigger than the earth 0.5
-    scene.add(stars);
-
-    // add AmbientLight
-    scene.add(new THREE.AmbientLight(0x777777));
-
-    // add DirectionalLight
-    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.15); // white,
-    directionalLight.position.set(5, 3, 5);
-    scene.add(directionalLight);
-
-    //--------------------------------------------------------------------------
-    // point is texture mapping, default color is random, vertex shader and fragment shader used here
-    ships = createPointCloud();     // ships type is THREE.PointCloud
-    ships.rotation.y = rotation;   // by default all points position is (0,0,0),not related to actual log,lat
-    scene.add(ships);
-
-    /* set several control_points between each pair of points (start, end)
-       transfer longitude and latitude to earth coordinates x,y,z;
-       set the path_splines; distance; and ship times
-    */
-    generateControlPoints(radius);
-
-    // use path_splines to set the line points, change the line color
-    path_lines = shipPathLines();
-    path_lines.rotation.y = rotation;
-    scene.add(path_lines);
-    //--------------------------------------------------------------------------
-
-    // after all the above staffs loaded,loading gif stops loading
-    show_loading(false);
-
-    // https://workshop.chromeexperiments.com/examples/gui/#1--Basic-Usage
-    // src="js/dat.gui.min.js"
-    var gui = new dat.GUI();
-
-    gui.add(this, 'ship_point_size', 0.01, 0.2).name("Size").onChange(function(value)
+    if (visible)
     {
-        pointBufGeo.attributes.size.needsUpdate = true;
-        for (var i = 0; i < length; ++i)
-        {
-            sizes[i] = ship_point_size;
-        }
-    });
-
-    gui.add(this, 'speedScale', minScale, maxScale).name("Speed").onFinishChange(function(value)
+        is_loading = true;
+        document.getElementById("loading_overlay").className = "show";
+        document.getElementById("loading_overlay").style.pointerEvents = "all";
+    }
+    else
     {
-        speed_changed = true;
-        update_ships();    // update speed and position?
-        speed_changed = false;
-    });
-
-    gui.add(this, 'ship_track_opacity', 0, 1.0).name("Track Opacity").onChange(function(value) {
-        path_lines.material.opacity = value;
-    });
-
-    gui.add(this, "handle_about").name("Hongyan Yi| Credits");
-
-    /*
-     TrackballControls.js is in the js sub-directory of the examples directory.
-     which allows you to rotate, zoom and pan the scene.
-     https://github.com/mrdoob/three.js/tree/master/examples/js/controls
-     It is part of the examples -- not the library. You must include it explicitly in your project.
-     You are free to modify it to your liking.
-     You may also want to consider OrbitControls, which is appropriate if your scene has a natural "up" direction.
-     */
-    controls = new THREE.TrackballControls(camera, renderer.domElement);
-    controls.rotateSpeed = 0.1;
-    controls.noZoom = false;
-    controls.noPan = true;
-    controls.staticMoving = false;
-    controls.minDistance = 0.75;  // zoom in level,if two small, might have frame buffer problem
-    // controls.minDistance = 0.05;  // zoom in level,if two small, might have frame buffer problem
-    controls.maxDistance = 3.0;   // zoom out level
-
-    // http://matthewcasperson.blogspot.com/2013/11/threejs-2-getting-started-part-2.html
-    // If you click on the stats counter, you will switch between two views.
-    // The first displays the frames per second, while the second displays the milliseconds per frame.
-    stats = new Stats();
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.top = '0px';
-    document.body.appendChild(stats.domElement);
-
-    // Goal: if resize the window after loaded, the whole graph should also be adaptable to the window.
-    // This requires camera's aspect ratio, projection matrix and the renderer's size, to be updated if the window is resized.
-    // We can specify a function to be run by adding an event listener to the window's resize event.
-    window.addEventListener('resize', onWindowResize, false);
+        is_loading = false;
+        document.getElementById("loading_overlay").className = "hide";
+        document.getElementById("loading_overlay").style.pointerEvents = "none";
+    }
 }
 
 
@@ -189,7 +79,6 @@ function createEarth(radius, segments)
         })
     );
 }
-
 
 /*
  I couldn't use this JPEG directly in three.js, so I used this technique to make a transparent PNG
@@ -228,19 +117,18 @@ function createStars(radius, segments) {
 function createPointCloud()
 {
     pointBufGeo = new THREE.BufferGeometry();
-    n_pnt = vessels.length;
 
-    positions = new Float32Array(n_pnt * 3); // positions and sizes are global variables
-    sizes = new Float32Array(n_pnt);
-    var colors = new Float32Array(n_pnt * 3); // color is temp variable
+    positions = new Float32Array(length * 3); // positions and sizes are global variables
+    sizes = new Float32Array(length);
+    var colors = new Float32Array(length * 3); // color is temp variable
 
-    for (var i = 0; i < n_pnt; i++)
+    for (var i = 0; i < length; i++)
     {
         positions[3 * i + 0] = 0;   // original position are the same
         positions[3 * i + 1] = 0;
         positions[3 * i + 2] = 0;
 
-        sizes[i] = 0.02;            // can be updated by GUI, ship_point_size variable.
+        sizes[i] = 0.02;            // can be updated by GUI, pointSize variable.
 
         colors[3 * i + 0] = 1.0;    // set geometry color to white
         colors[3 * i + 1] = 1.0;
@@ -369,7 +257,7 @@ function generateControlPoints(radius)
             // it seems unnecessary, since all the points are finally put into the splineCurve.
             // var arc_radius = radius + Math.sin(t * Math.PI) * max_height;
 
-            var arc_radius = radius + 0.005; // when some ships moving, others might temp static
+            var arc_radius = radius + 0.003; // when some ships moving, others might temp static
             // var arc_radius = radius; // without extra height,all ships within earth, ships not see unless zoom in.
 
             var posXYZ = latLngToXYZ(latlng.lat, latlng.lng, arc_radius);
@@ -403,8 +291,8 @@ function shipPathLines()
 
     var ctrl_pnts = 32;
     // var ctrl_pnts = 8;
-    var vertices = new Float32Array(vessels.length * 6 * ctrl_pnts);
-    var colors = new Float32Array(vessels.length * 6 * ctrl_pnts);
+    var vertices = new Float32Array(length * 6 * ctrl_pnts);
+    var colors = new Float32Array(length * 6 * ctrl_pnts);
 
     for (var i = 0; i < length; ++i)
     {
@@ -444,7 +332,7 @@ function shipPathLines()
         color: 0xffffff,    // material color did not decide the final color
         vertexColors: THREE.VertexColors,
         transparent: true,
-        opacity: ship_track_opacity,
+        opacity: lineOpacity,
         depthTest: true,
         depthWrite: false,
         linewidth: 0.003
@@ -454,7 +342,8 @@ function shipPathLines()
     // return new THREE.Line(lineBufGeom, line_material);
 }
 
-function onWindowResize() {
+function onWindowResize()
+{
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -480,6 +369,18 @@ function update_ships()
         if ( Date.now() > startTime[i] )
         {
             var ease_val = easeOutQuadratic(Date.now() - startTime[i], 0, 1, endTime[i] - startTime[i]);
+
+            // if (i == 0)
+            // {
+            //     if (ease_val >= 0 && ease_val <= 1)
+            //     {
+            //         console.log("ease_val = ",ease_val)
+            //     }
+            //     else if (ease_val < 0)
+            //     {
+            //         console.log("ease_val = 0, when < 0")
+            //     }
+            // }
 
             if (ease_val < 0 || speed_changed)  // deceleration speed
             {
@@ -508,20 +409,131 @@ function show_about(visible) {
     }
 }
 
-function show_loading(visible) {
-    if (visible) {
-        is_loading = true;
-        document.getElementById("loading_overlay").className = "show";
-        document.getElementById("loading_overlay").style.pointerEvents = "all";
-    } else {
-        is_loading = false;
-        document.getElementById("loading_overlay").className = "hide";
-        document.getElementById("loading_overlay").style.pointerEvents = "none";
-    }
+function handle_About() {
+    show_about(true);
 }
 
-function handle_about() {
-    show_about(true);
+
+function init() {
+    show_loading(true); //at the beginning, loading gif exists
+
+    /* The renderer is responsible to render the scene in the browsers.
+     Three.js supports different renderers like WebGL,Canvas,SVG and CSS 3D.*/
+    renderer = new THREE.WebGLRenderer();
+    renderer.setClearColor(0x000000, 1.0); // Sets the clear color and opacity.
+    renderer.setPixelRatio(window.devicePixelRatio); // Sets device pixel ratio. This is usually used for HiDPI device to prevent bluring output canvas.
+    renderer.setSize(window.innerWidth, window.innerHeight); // use window width and height to allow our earth to fill the browser window
+    document.body.appendChild(renderer.domElement);
+
+
+    // The camera determines what we'll see when we render the scene.
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 100);
+    camera.position.z = 1.5;
+
+
+    /* The scene is the container used to store and keep track
+     of the objects (earth and stars) we want to render.*/
+    scene = new THREE.Scene();
+
+    // add Earth
+    earth = createEarth(radius, segments);        // radius = 0.5; defined at the beginning
+    earth.rotation.y = rotation;
+    scene.add(earth)
+
+    // add Cloud
+    clouds = createClouds(radius, segments);     // radius is the same as earth but + 0.0025 when define a new sphere
+    clouds.rotation.y = rotation;
+    scene.add(clouds)
+
+    // add Stars
+    var stars = createStars(90, 64);                // radius = 90, much bigger than the earth 0.5
+    scene.add(stars);
+
+    // add AmbientLight
+    scene.add(new THREE.AmbientLight(0x777777));
+
+    // add DirectionalLight
+    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.15); // white,
+    directionalLight.position.set(5, 3, 5);
+    scene.add(directionalLight);
+
+    //--------------------------------------------------------------------------
+    // point is texture mapping, default color is random, vertex shader and fragment shader used here
+    ships = createPointCloud();     // ships type is THREE.PointCloud
+    ships.rotation.y = rotation;   // by default all points position is (0,0,0),not related to actual log,lat
+    scene.add(ships);
+
+    /* set several control_points between each pair of points (start, end)
+     transfer longitude and latitude to earth coordinates x,y,z;
+     set the path_splines; distance; and ship times
+     */
+    generateControlPoints(radius);
+
+    // use path_splines to set the line points, change the line color
+    path_lines = shipPathLines();   //ship route type is THREE.Line
+    path_lines.rotation.y = rotation;
+    scene.add(path_lines);
+    //--------------------------------------------------------------------------
+
+    // after all the above staffs loaded,loading gif stops loading
+    show_loading(false);
+
+    // https://workshop.chromeexperiments.com/examples/gui/#1--Basic-Usage
+    // src="js/dat.gui.min.js"
+    var gui = new dat.GUI();
+
+    gui.add(this, 'pointSize', 0.01, 0.2).name("Size").onChange(function(value)
+    {
+        pointBufGeo.attributes.size.needsUpdate = true;
+        for (var i = 0; i < length; ++i)
+        {
+            sizes[i] = pointSize;
+        }
+    });
+
+    gui.add(this, 'speedScale', minScale, maxScale).name("Speed").onFinishChange(function(value)
+    {
+        speed_changed = true;   // speedScale decides the startTime and endTime
+        update_ships();          // update position
+        speed_changed = false;
+    });
+
+    gui.add(this, 'lineOpacity', 0.0, 1.0).name("Track Opacity").onChange(function(value) {
+        path_lines.material.opacity = lineOpacity;
+    });
+
+    gui.add(this, "handle_About").name("Hongyan Yi| Credits");
+
+    /*
+     TrackballControls.js is in the js sub-directory of the examples directory.
+     which allows you to rotate, zoom and translate the scene.
+     https://github.com/mrdoob/three.js/tree/master/examples/js/controls
+     It is part of the examples -- not the library. You must include it explicitly in your project.
+     You are free to modify it to your liking.
+     You may also want to consider OrbitControls, which is appropriate if your scene has a natural "up" direction.
+     */
+    controls = new THREE.TrackballControls(camera, renderer.domElement);
+    controls.rotateSpeed = 0.1;
+    controls.noZoom = false;
+    controls.noPan = true;
+    controls.staticMoving = false;
+    controls.minDistance = 0.75;  // zoom in level,if two small, might have frame buffer problem
+    // controls.minDistance = 0.05;  // zoom in level,if two small, might have frame buffer problem
+    controls.maxDistance = 3.0;   // zoom out level
+
+    // http://matthewcasperson.blogspot.com/2013/11/threejs-2-getting-started-part-2.html
+    // If you click on the stats counter, you will switch between two views.
+    // The first displays the frames per second, while the second displays the milliseconds per frame.
+    stats = new Stats();
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.top = '0px';
+    document.body.appendChild(stats.domElement);
+
+    // Goal: if resize the window after loaded, the whole graph should also be adaptable to the window.
+    // This requires camera's aspect ratio, projection matrix and the renderer's size, to be updated if the window is resized.
+    // We can specify a function to be run by adding an event listener to the window's resize event.
+
+    window.addEventListener('resize', onWindowResize, false);
 }
 
 function animate(time) {
@@ -556,8 +568,8 @@ function animate(time) {
     renderer.render(scene, camera);
 }
 
-function author()
+function start_app()
 {
-
-
+    init();
+    animate();// after init then animate
 }

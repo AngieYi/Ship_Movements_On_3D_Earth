@@ -73,7 +73,7 @@ function createEarth(radius, segments)
         new THREE.MeshPhongMaterial({
             map:         THREE.ImageUtils.loadTexture('images/no_cloud_surface.jpg'),
             bumpMap:     THREE.ImageUtils.loadTexture('images/bump_surface.jpg'),
-            bumpScale:   0.005,
+            bumpScale:   0.002,
             specularMap: THREE.ImageUtils.loadTexture('images/water.png'),
             specular:    new THREE.Color('white')
         })
@@ -349,7 +349,7 @@ function onWindowResize()
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function easeOutQuadratic(t, b, c, d)
+function easeInOutQuad(t, b, c, d)
 {
     t /= d / 2;
     if (t < 1) // less than half
@@ -368,7 +368,7 @@ function update_ships()
     {
         if ( Date.now() > startTime[i] )
         {
-            var ease_val = easeOutQuadratic(Date.now() - startTime[i], 0, 1, endTime[i] - startTime[i]);
+            var ease_val = easeInOutQuad(Date.now() - startTime[i], 0, 1, endTime[i] - startTime[i]);
 
             // if (i == 0)
             // {

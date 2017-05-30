@@ -107,7 +107,7 @@ function createStars(radius, segments) {
         new THREE.MeshBasicMaterial({
             map:  THREE.ImageUtils.loadTexture('images/stars.png'),
             side: THREE.BackSide,
-            specular: new THREE.Color('grey')
+            // specular: new THREE.Color('grey')
         })
     );
 }
@@ -147,6 +147,7 @@ function createPointCloud()
         color: {
             type: "c",
             value: new THREE.Color(0xffffff)    // default is white color
+            // value: new THREE.Color(0xffd700)        // change the color of the point
         },
         texture: {
             type: "t",                          // texture picture influences the effect
@@ -170,14 +171,20 @@ function createPointCloud()
         attributes: attributes,
         vertexShader: document.getElementById('vertexshader').textContent,
         fragmentShader: document.getElementById('fragmentshader').textContent,
-        blending: THREE.AdditiveBlending,   // what is blending? difference between additive blending & NormalBlending?
-        // blending: THREE.NormalBlending,
-        depthTest: true,
-        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        // blending: THREE.NormalBlending,//Additive blending is different to normal blending because it does not interpolate from a pose to an other.
+        // Instead it combines poses, meaning you can see the two animations at the same time.
+        // depthTest: true,//Whether to have depth test enabled when rendering this material. Default is true.
+        depthWrite: false,//Whether rendering this material has any effect on the depth buffer. Default is true.
+        // depthWrite: true,// enable depth buffer
         transparent: true
+        // transparent: false
     });
+
     return new THREE.PointCloud(pointBufGeo, shaderMaterial);
 }
+
+
 
 function InnerPointLatLng(lat1, lng1, lat2, lng2, t)
 {
@@ -213,7 +220,7 @@ function latLngToXYZ(lat, lng, radius)
     return {
         x: radius * Math.cos(LAT) * Math.cos(LNG),
         y: radius * Math.sin(LAT),
-        z: (-1) * radius * Math.cos(LAT) * Math.sin(LNG)
+        z: -radius * Math.cos(LAT) * Math.sin(LNG)
     };
 }
 
@@ -244,7 +251,8 @@ function generateControlPoints(radius)
 
         var points = [];                // temp array
 
-        var max_height = 0.003;
+        // var max_height = 0.003;
+        // var max_height = Math.random() * 0.003;
         //var max_height = 100.0 * 0.003;   // too high, height is very obvious
 
         var num_pnts = 8;
@@ -338,8 +346,8 @@ function shipPathLines()
         linewidth: 0.003
     });
 
-    return new THREE.Line(lineBufGeom, line_material, THREE.LinePieces);
-    // return new THREE.Line(lineBufGeom, line_material);
+    // return new THREE.Line(lineBufGeom, line_material, THREE.LinePieces);
+    return new THREE.Line(lineBufGeom, line_material);
 }
 
 function onWindowResize()
@@ -454,6 +462,7 @@ function init() {
 
     // add DirectionalLight
     var directionalLight = new THREE.DirectionalLight(0xffffff, 0.15); // white,
+    // var directionalLight = new THREE.DirectionalLight(0xffff00, 0.15); // yellow,
     directionalLight.position.set(5, 3, 5);
     scene.add(directionalLight);
 
@@ -561,8 +570,9 @@ function animate(time) {
     }
 
     stats.update();
+    clouds.rotation.y += 0.001; // clouds rotate faster than earth
+    // clouds.rotation.y += 0.00048;
     earth.rotation.y += 0.0005;
-    clouds.rotation.y += 0.00048;
     ships.rotation.y += 0.0005;
     path_lines.rotation.y += 0.0005;
     renderer.render(scene, camera);

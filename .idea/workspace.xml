@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="619781af-c383-472d-9144-4d5e4cce448e" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/Hongyan.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/no_cloud_surface3.jpg" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/images/no_cloud_surface.jpg" afterPath="$PROJECT_DIR$/images/no_cloud_surface.jpg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/app.js" afterPath="$PROJECT_DIR$/js/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test2.js" afterPath="$PROJECT_DIR$/js/test2.js" />
     </list>
     <ignored path="3D_Web_Mapping_AISData.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,21 +34,10 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5698">
-              <caret line="365" column="0" selection-start-line="365" selection-start-column="0" selection-end-line="365" selection-end-column="0" />
+            <state relative-caret-position="-5325">
+              <caret line="420" column="21" selection-start-line="420" selection-start-column="21" selection-end-line="420" selection-end-column="21" />
               <folding>
-                <element signature="n#!!block;n#createEarth#0" expanded="false" />
-                <element signature="n#!!block;n#createClouds#0" expanded="false" />
-                <element signature="n#!!block;n#createStars#0" expanded="false" />
-                <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-                <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-                <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-                <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-                <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-                <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-                <element signature="n#!!block;n#show_about#0" expanded="false" />
-                <element signature="n#!!block;n#handle_About#0" expanded="false" />
-                <element signature="n#!!block;n#animate#0" expanded="false" />
+                <element signature="n#!!block;n#show_loading#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -52,10 +46,10 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="292">
-              <caret line="17" column="19" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="19" />
+            <state relative-caret-position="255">
+              <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
               <folding>
-                <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+                <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -78,9 +72,9 @@
       <list>
         <option value="$PROJECT_DIR$/js/ais.js" />
         <option value="$PROJECT_DIR$/js/test.js" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/js/test2.js" />
         <option value="$PROJECT_DIR$/js/app.js" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -94,7 +88,7 @@
     <option name="x" value="-11" />
     <option name="y" value="-11" />
     <option name="width" value="1942" />
-    <option name="height" value="1162" />
+    <option name="height" value="1042" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -281,18 +275,21 @@
       <workItem from="1494615710305" duration="2194000" />
       <workItem from="1494958510793" duration="9128000" />
       <workItem from="1495144169008" duration="608000" />
-      <workItem from="1495497597430" duration="2069000" />
+      <workItem from="1495497597430" duration="26289000" />
+      <workItem from="1495814510125" duration="304000" />
+      <workItem from="1495814829837" duration="10491000" />
+      <workItem from="1496174419967" duration="78000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="280400000" />
+    <option name="totallyTimeSpent" value="315493000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-11" y="-11" width="1942" height="1162" extended-state="6" />
+    <frame x="-11" y="-11" width="1942" height="1042" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13199578" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15786695" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -346,23 +343,78 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/app.js">
+    <entry file="file://$PROJECT_DIR$/js/test2.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7363">
-          <caret line="287" column="22" selection-start-line="287" selection-start-column="9" selection-end-line="287" selection-end-column="22" />
+        <state relative-caret-position="16021">
+          <caret line="542" column="0" selection-start-line="542" selection-start-column="0" selection-end-line="542" selection-end-column="0" />
           <folding>
             <element signature="n#!!block;n#createEarth#0" expanded="false" />
             <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
             <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
             <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
             <element signature="n#!!block;n#show_about#0" expanded="false" />
             <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="444">
+          <caret line="12" column="78" selection-start-line="12" selection-start-column="78" selection-end-line="12" selection-end-column="78" />
+          <folding>
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9879">
+          <caret line="267" column="0" selection-start-line="267" selection-start-column="0" selection-end-line="267" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7363">
+          <caret line="287" column="22" selection-start-line="287" selection-start-column="9" selection-end-line="287" selection-end-column="22" />
+          <folding>
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -372,15 +424,13 @@
         <state relative-caret-position="10175">
           <caret line="373" column="40" selection-start-line="373" selection-start-column="40" selection-end-line="373" selection-end-column="40" />
           <folding>
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
+            <element signature="n#!!block;n#createEarth#0" expanded="false" />
+            <element signature="n#!!block;n#createClouds#0" expanded="false" />
             <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
             <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#easeOutQuadratic#0" expanded="false" />
             <element signature="n#!!block;n#show_about#0" expanded="false" />
             <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -390,7 +440,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -400,18 +450,7 @@
         <state relative-caret-position="10619">
           <caret line="287" column="22" selection-start-line="287" selection-start-column="9" selection-end-line="287" selection-end-column="22" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -421,15 +460,13 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
+            <element signature="n#!!block;n#createEarth#0" expanded="false" />
+            <element signature="n#!!block;n#createClouds#0" expanded="false" />
             <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
             <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#easeOutQuadratic#0" expanded="false" />
             <element signature="n#!!block;n#show_about#0" expanded="false" />
             <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -439,18 +476,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -460,7 +486,7 @@
         <state relative-caret-position="666">
           <caret line="29" column="34" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -470,18 +496,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -491,7 +506,7 @@
         <state relative-caret-position="666">
           <caret line="29" column="34" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -501,18 +516,7 @@
         <state relative-caret-position="17020">
           <caret line="460" column="45" selection-start-line="460" selection-start-column="45" selection-end-line="460" selection-end-column="45" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -522,7 +526,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -532,18 +536,7 @@
         <state relative-caret-position="7474">
           <caret line="516" column="51" selection-start-line="509" selection-start-column="4" selection-end-line="516" selection-end-column="51" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -553,15 +546,13 @@
         <state relative-caret-position="5180">
           <caret line="140" column="0" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
           <folding>
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
+            <element signature="n#!!block;n#createEarth#0" expanded="false" />
+            <element signature="n#!!block;n#createClouds#0" expanded="false" />
             <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
             <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#easeOutQuadratic#0" expanded="false" />
             <element signature="n#!!block;n#show_about#0" expanded="false" />
             <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -571,7 +562,7 @@
         <state relative-caret-position="851">
           <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -588,18 +579,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -609,18 +589,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -630,7 +599,7 @@
         <state relative-caret-position="259">
           <caret line="7" column="44" selection-start-line="7" selection-start-column="44" selection-end-line="7" selection-end-column="44" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -647,18 +616,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -668,7 +626,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -678,7 +636,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -688,7 +646,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -698,18 +656,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -719,7 +666,7 @@
         <state relative-caret-position="1258">
           <caret line="34" column="25" selection-start-line="34" selection-start-column="25" selection-end-line="34" selection-end-column="25" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -729,18 +676,7 @@
         <state relative-caret-position="12321">
           <caret line="353" column="70" selection-start-line="353" selection-start-column="60" selection-end-line="353" selection-end-column="70" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -750,7 +686,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -760,18 +696,7 @@
         <state relative-caret-position="13061">
           <caret line="353" column="70" selection-start-line="353" selection-start-column="60" selection-end-line="353" selection-end-column="70" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -781,7 +706,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -791,18 +716,7 @@
         <state relative-caret-position="13061">
           <caret line="353" column="70" selection-start-line="353" selection-start-column="60" selection-end-line="353" selection-end-column="70" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -812,7 +726,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -822,18 +736,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -906,49 +809,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/test2.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="373" column="40" selection-start-line="373" selection-start-column="40" selection-end-line="373" selection-end-column="40" />
+        <state relative-caret-position="207">
+          <caret line="542" column="0" selection-start-line="542" selection-start-column="0" selection-end-line="542" selection-end-column="0" />
           <folding>
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
+            <element signature="n#!!block;n#createEarth#0" expanded="false" />
+            <element signature="n#!!block;n#createClouds#0" expanded="false" />
             <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
             <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
             <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#easeOutQuadratic#0" expanded="false" />
             <element signature="n#!!block;n#show_about#0" expanded="false" />
             <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="17" column="19" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="19" />
+        <state relative-caret-position="255">
+          <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
           <folding>
-            <element signature="n#script#7;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#script#6;n#head#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5698">
-          <caret line="365" column="0" selection-start-line="365" selection-start-column="0" selection-end-line="365" selection-end-column="0" />
+        <state relative-caret-position="-5325">
+          <caret line="420" column="21" selection-start-line="420" selection-start-column="21" selection-end-line="420" selection-end-column="21" />
           <folding>
-            <element signature="n#!!block;n#createEarth#0" expanded="false" />
-            <element signature="n#!!block;n#createClouds#0" expanded="false" />
-            <element signature="n#!!block;n#createStars#0" expanded="false" />
-            <element signature="n#!!block;n#createPointCloud#0" expanded="false" />
-            <element signature="n#!!block;n#InnerPointLatLng#0" expanded="false" />
-            <element signature="n#!!block;n#latLngToXYZ#0" expanded="false" />
-            <element signature="n#!!block;n#setShipTimes#0" expanded="false" />
-            <element signature="n#!!block;n#generateControlPoints#0" expanded="false" />
-            <element signature="n#!!block;n#onWindowResize#0" expanded="false" />
-            <element signature="n#!!block;n#show_about#0" expanded="false" />
-            <element signature="n#!!block;n#handle_About#0" expanded="false" />
-            <element signature="n#!!block;n#animate#0" expanded="false" />
+            <element signature="n#!!block;n#show_loading#0" expanded="false" />
           </folding>
         </state>
       </provider>

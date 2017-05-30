@@ -73,7 +73,7 @@ function createEarth(radius, segments)
         new THREE.MeshPhongMaterial({
             map:         THREE.ImageUtils.loadTexture('images/no_cloud_surface.jpg'),
             bumpMap:     THREE.ImageUtils.loadTexture('images/bump_surface.jpg'),
-            bumpScale:   0.005,
+            bumpScale:   0.002,
             specularMap: THREE.ImageUtils.loadTexture('images/water.png'),
             specular:    new THREE.Color('white')
         })
@@ -101,22 +101,40 @@ function createClouds(radius, segments) {
  var stars = createStars(90, 64);
  scene.add(stars);
  */
+
+
 function createStars(radius, segments) {
     return new THREE.Mesh(
         new THREE.SphereGeometry(radius, segments, segments),
+
         new THREE.MeshBasicMaterial({
             map:  THREE.ImageUtils.loadTexture('images/stars.png'),
             side: THREE.BackSide,
-            specular: new THREE.Color('grey')
         })
     );
 }
+
+var shaderMaterial = new THREE.ShaderMaterial({
+    uniforms: uniforms,
+    attributes: attributes,
+    vertexShader: document.getElementById('vertexshader').textContent,
+    fragmentShader: document.getElementById('fragmentshader').textContent,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    transparent: true
+});
+
 
 
 // create point cloud using shader
 function createPointCloud()
 {
     pointBufGeo = new THREE.BufferGeometry();
+    pointBufGeo.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+    pointBufGeo.addAttribute('customColor', new THREE.BufferAttribute(colors, 3));
+    pointBufGeo.addAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+
 
     positions = new Float32Array(length * 3); // positions and sizes are global variables
     sizes = new Float32Array(length);
@@ -131,8 +149,8 @@ function createPointCloud()
         sizes[i] = 0.02;            // can be updated by GUI, pointSize variable.
 
         colors[3 * i + 0] = 1.0;    // set geometry color to white
-        colors[3 * i + 1] = 1.0;
-        colors[3 * i + 2] = 1.0;
+        colors[3 * i + 1] = 0.0;
+        colors[3 * i + 2] = 0.0;
     }
 
     pointBufGeo.addAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -165,17 +183,21 @@ function createPointCloud()
         }
     };
 
+
+
     var shaderMaterial = new THREE.ShaderMaterial({
-        uniforms: uniforms, // color and texture the image
+        uniforms: uniforms,
         attributes: attributes,
         vertexShader: document.getElementById('vertexshader').textContent,
         fragmentShader: document.getElementById('fragmentshader').textContent,
-        blending: THREE.AdditiveBlending,   // what is blending? difference between additive blending & NormalBlending?
-        // blending: THREE.NormalBlending,
-        depthTest: true,
+        blending: THREE.AdditiveBlending,
         depthWrite: false,
         transparent: true
     });
+
+
+
+
     return new THREE.PointCloud(pointBufGeo, shaderMaterial);
 }
 
@@ -290,49 +312,35 @@ function shipPathLines()
     var lineBufGeom = new THREE.BufferGeometry();
 
     var ctrl_pnts = 32;
-    // var ctrl_pnts = 8;
     var vertices = new Float32Array(length * 6 * ctrl_pnts);
     var colors = new Float32Array(length * 6 * ctrl_pnts);
-
     for (var i = 0; i < length; ++i)
     {
         for (var j = 0; j < ctrl_pnts - 1; ++j)
         {
-            /* path_splines are generated in generateControlPoints
-             //refer: SplineCurve3.getPoint http://jsfiddle.net/epjfczz8/
-             .getPoint(t)
-             Returns a vector for point t of the curve where t is between 0 and 1. Must be implemented in the extending class.
-             */
             var s_pos = path_splines[i].getPoint(j / (ctrl_pnts - 1));
             var e_pos = path_splines[i].getPoint((j + 1) / (ctrl_pnts - 1));
-
             vertices[(i * ctrl_pnts + j) * 6 + 0] = s_pos.x;
             vertices[(i * ctrl_pnts + j) * 6 + 1] = s_pos.y;
             vertices[(i * ctrl_pnts + j) * 6 + 2] = s_pos.z;
-
             vertices[(i * ctrl_pnts + j) * 6 + 3] = e_pos.x;
             vertices[(i * ctrl_pnts + j) * 6 + 4] = e_pos.y;
             vertices[(i * ctrl_pnts + j) * 6 + 5] = e_pos.z;
-
-            colors[(i * ctrl_pnts + j) * 6 + 0] = 0.0; // keep start and end point the same color
-            colors[(i * ctrl_pnts + j) * 6 + 1] = 1.0; // otherwise, the whole route of each ship seems like bamboo
+            colors[(i * ctrl_pnts + j) * 6 + 0] = 0.0;
+            colors[(i * ctrl_pnts + j) * 6 + 1] = 1.0;
             colors[(i * ctrl_pnts + j) * 6 + 2] = 0.5;
-
             colors[(i * ctrl_pnts + j) * 6 + 3] = 0.0;
             colors[(i * ctrl_pnts + j) * 6 + 4] = 1.0;
             colors[(i * ctrl_pnts + j) * 6 + 5] = 0.5;
         }
     }
 
-
-    var lineBufGeom = new THREE.BufferGeometry();
-
     lineBufGeom.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
     lineBufGeom.addAttribute('color', new THREE.BufferAttribute(colors, 3));
     lineBufGeom.computeBoundingSphere();
 
     var line_material = new THREE.LineBasicMaterial({
-        color: 0xffffff,
+        color: 0xffffff,    // material color did not decide the final color
         vertexColors: THREE.VertexColors,
         transparent: true,
         opacity: lineOpacity,
@@ -342,8 +350,6 @@ function shipPathLines()
     });
 
     return new THREE.Line(lineBufGeom, line_material, THREE.LinePieces);
-
-
     // return new THREE.Line(lineBufGeom, line_material);
 }
 
@@ -354,17 +360,23 @@ function onWindowResize()
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function easeOutQuadratic(t, b, c, d)
+
+
+
+
+function easeInOutQuad(t, b, c, d)
 {
     t /= d / 2;
-    if (t < 1) // less than half
+    if (t < 1)
         return c / 2 * t * t + b;
-    --t;       // more than half
+    --t;
     return -c / 2 * (t * (t - 2) - 1) + b;
 }
 
 
 // change the position of the ship
+
+
 function update_ships()
 {
     pointBufGeo.attributes.position.needsUpdate = true;
@@ -373,21 +385,9 @@ function update_ships()
     {
         if ( Date.now() > startTime[i] )
         {
-            var ease_val = easeOutQuadratic(Date.now() - startTime[i], 0, 1, endTime[i] - startTime[i]);
+            var ease_val = easeInOutQuad(Date.now() - startTime[i], 0, 1, endTime[i] - startTime[i]);
 
-            // if (i == 0)
-            // {
-            //     if (ease_val >= 0 && ease_val <= 1)
-            //     {
-            //         console.log("ease_val = ",ease_val)
-            //     }
-            //     else if (ease_val < 0)
-            //     {
-            //         console.log("ease_val = 0, when < 0")
-            //     }
-            // }
-
-            if (ease_val < 0 || speed_changed)  // deceleration speed
+            if (ease_val < 0 || speed_changed)
             {
                 ease_val = 0;
                 setShipTimes(i);
@@ -458,7 +458,7 @@ function init() {
     scene.add(new THREE.AmbientLight(0x777777));
 
     // add DirectionalLight
-    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.15); // white,
+    var directionalLight = new THREE.DirectionalLight(0xffffff, 0.15);
     directionalLight.position.set(5, 3, 5);
     scene.add(directionalLight);
 
@@ -541,33 +541,16 @@ function init() {
     window.addEventListener('resize', onWindowResize, false);
 }
 
-function animate(time) {
-    /*
-     http://creativejs.com/resources/requestanimationframe/
-     So how often is the draw function called?
-     That all depends on the frame rate of your browser and computer,but typically it’s 60fps,
-     which is cool as your computer’s display typically refreshes at a rate of 60Hz.
-     The key difference here is that you are requesting the browser to draw your animation at the next available opportunity,
-     not at a predetermined interval. It has also been hinted that browsers could choose to optimize performance
-     of requestAnimationFrame based on load, element visibility (being scrolled out of view) and battery status.
-
-     The other beauty of requestAnimationFrame is that it will group all of your animations into a single browser repaint.
-     This saves CPU cycles and allows your device to live a longer, happier life.
-     So if you use requestAnimationFrame all your animations should become silky smooth,synced with your GPU and hog much less CPU.
-     And if you browse to a new tab, the browser will throttle the animation to a crawl, preventing it from taking over your computer whilst you’re busy.
-     */
-
+function animate(time)
+{
     requestAnimationFrame(animate);
-
-    // loading.gif by default false
     if ( ! is_loading ) {
         controls.update();
         update_ships();
     }
-
     stats.update();
+    clouds.rotation.y += 0.001;
     earth.rotation.y += 0.0005;
-    clouds.rotation.y += 0.00048;
     ships.rotation.y += 0.0005;
     path_lines.rotation.y += 0.0005;
     renderer.render(scene, camera);

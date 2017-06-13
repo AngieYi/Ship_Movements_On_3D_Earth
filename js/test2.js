@@ -52,24 +52,8 @@ function show_loading(visible)
 function createEarth(radius, segments)
 {
     return new THREE.Mesh(
-        /* second and third parameter is the number of width and height segments.
-         The earth is drawn as a polygon mesh, and by adding more segments
-         it will be less "blocky" and take more time to render.
-         */
         new THREE.SphereGeometry(radius, segments, segments),
 
-        // wrap map data around the earth.
-        /*
-         1. This material is used to create shiny materials, and we use it to make the ocean reflective.
-         4096 x 2048 px, which was the maximum texture size for the GPU of my computer.
-         If you want more detailed textures you need to slice up the Earth.
-         2. The result is an apparently bumpy surface rather than a smooth surface although
-         the surface of the underlying object is not actually changed.
-         You can adjust the bump effect (how much the map affects lighting) with the bumpScale parameter.
-         3. I want to make the ocean and lakes reflective by applying a land/water mask.
-         This specular map defines the surface's shininess. Only the sea is specular because water reflects
-         water more than earth. You can control the specular color with specular parameter.
-         */
         new THREE.MeshPhongMaterial({
             map:         THREE.ImageUtils.loadTexture('images/no_cloud_surface.jpg'),
             bumpMap:     THREE.ImageUtils.loadTexture('images/bump_surface.jpg'),

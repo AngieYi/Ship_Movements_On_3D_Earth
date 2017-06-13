@@ -20,7 +20,7 @@ var speedScale = 1.0;
 var minScale = 1.0;
 var maxScale = 25.0;
 
-var lineOpacity = 0.01;
+var lineOpacity = 0.00;
 var pointSize = 0.01;
 
 var earth = 0;
